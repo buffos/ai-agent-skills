@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mermaid Diagrams"
+  short_description: "Choose the right Mermaid diagram quickly."
+  default_prompt: "Create a focused Mermaid diagram from the user request. Choose the best diagram type, keep the diagram narrow, and explain only brief tradeoffs when needed."
