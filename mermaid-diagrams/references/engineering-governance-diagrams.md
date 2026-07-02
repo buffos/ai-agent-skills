@@ -65,8 +65,10 @@ Use `+<count>` style when iterative editing is easier than absolute ranges.
 
 Use for high-level system decomposition without implying runtime order.
 
+### Flat layout
+
 ```mermaid
-block-beta
+block
     columns 3
     Frontend["Frontend"]
     API["API Layer"]
@@ -75,11 +77,44 @@ block-beta
     API --> Data
 ```
 
+### Nested blocks with columns
+
+Blocks can nest to group related components. Each `block:ID["Label"]` opens a named block region; `columns` inside it controls the inner grid.
+
+```mermaid
+block
+    columns 1
+
+    block:external["External"]
+        columns 3
+        telegram["Telegram"]
+        discord["Discord"]
+        slack["Slack"]
+    end
+
+    block:app["Application"]
+        columns 2
+        block:plugins["Plugins"]
+            columns 1
+            bookmarks["bookmarks"]
+            feeds["feeds"]
+        end
+        gateway["Chat Gateway"]
+        ai["AI Provider"]
+    end
+
+    telegram --> gateway
+    discord --> gateway
+    slack --> gateway
+    gateway --> ai
+```
+
 Choose this over flowchart when the system is structural, not procedural.
 
-## Common Mistakes
+### Common Mistakes
 
 - Using requirement diagrams as a substitute for architecture
 - Using gitGraph for generic workflow logic
 - Using packet diagrams without exact field widths
 - Using block diagrams when state or timing is the actual concern
+- Using bare `block-beta` as the diagram type keyword — use `block` instead (the older keyword `block-beta` was renamed)
