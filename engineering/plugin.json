@@ -1,0 +1,10 @@
+{
+  "name": "engineering",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for engineering use.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/productivity-skills",
+  "license": "Apache 2.0"
+}

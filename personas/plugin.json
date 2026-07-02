@@ -1,0 +1,10 @@
+{
+  "name": "personas",
+  "version": "1.0.0",
+  "description": "Curated collection of agent personas.",
+  "author": {
+    "name": "Kostas Oraiopoulos"
+  },
+  "repository": "https://github.com/buffos/personas-skills",
+  "license": "Apache 2.0"
+}
