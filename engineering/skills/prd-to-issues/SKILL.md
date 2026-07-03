@@ -1,11 +1,13 @@
 ---
 name: prd-to-issues
-description: Break a PRD into independently-workable issues and write each as a local markdown file in docs/agents/issues/pending. Use when the user wants to turn a PRD into a list of concrete tasks.
+description: Break a PRD into independently-workable issues and write each as a local markdown file in docs/agents/issues/pending. Use when the user wants to turn a capability PRD into concrete tasks while respecting the `.okf` planning graph.
 ---
 
 # PRD to Issues
 
 Break a PRD into independently-grabbable issues using vertical slices (tracer bullets), written as local markdown files.
+
+If `.okf/` exists, use `$okf-planning-profile` and read [../../../experimenting/okf-planning-profile/REFERENCE.md](../../../experimenting/okf-planning-profile/REFERENCE.md) before inferring capability ownership, shared-concern links, or issue write-back behavior.
 
 ## Process
 
@@ -14,6 +16,14 @@ Break a PRD into independently-grabbable issues using vertical slices (tracer bu
 Ask the user for the PRD file path (e.g. `docs/agents/issues/prd.md`).
 
 If the PRD is not already in your context window, read it from the file.
+
+If `.okf/` exists, also identify the owning capability node before drafting slices. Read:
+
+- the originating capability concept
+- its parent concept
+- any linked shared concepts that constrain reuse or shared behavior
+
+Interpret those node fields through `$okf-planning-profile` rather than inventing local rules.
 
 ### 2. Explore the codebase (optional)
 
@@ -24,6 +34,8 @@ If you have not already explored the codebase, do so to understand the current s
 Break the PRD into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
 
 Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+
+If the capability graph identifies shared concerns or adjacent capabilities, use that context to avoid generating issues that duplicate work already modeled elsewhere.
 
 <vertical-slice-rules>
 - Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
@@ -90,6 +102,8 @@ Reference by number from the parent PRD:
 </issue-template>
 
 Do NOT close or modify the parent PRD file.
+
+If `.okf/` exists, append the created issue file paths to the owning capability concept's `issues` references after the issue files are written through `$okf-planning-profile`, using the planning profile as the source of truth for field shape.
 
 ### 6. Create or update the issues registry
 

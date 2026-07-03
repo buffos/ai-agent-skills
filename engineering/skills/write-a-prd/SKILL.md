@@ -1,9 +1,13 @@
 ---
 name: write-a-prd
-description: Generate a PRD from the client brief and write it as a local markdown file in docs/agents/issues/. Use when the user wants to turn a client request into a structured PRD.
+description: Generate a PRD for a bounded capability and write it as a local markdown file in docs/agents/issues/. Use when the user wants to turn a selected capability into a structured implementation PRD.
 ---
 
-This skill will be invoked when the user wants to create a PRD. You may skip steps if you don't consider them necessary.
+This skill writes detailed implementation PRDs. In repos that use `.okf/`, the capability graph is the planning source of truth and this skill is downstream of it.
+
+You may skip steps if they are unnecessary, but do not invent missing planning structure when the graph should exist.
+
+If `.okf/` exists, use `$okf-planning-profile` and read [../../../experimenting/okf-planning-profile/REFERENCE.md](../../../experimenting/okf-planning-profile/REFERENCE.md) before making assumptions about capability-node fields, planning states, or graph relationships.
 
 ## PRD Structure Convention
 
@@ -18,7 +22,12 @@ This project uses a **main + sub-PRD** architecture:
 
 ### 1. Determine the target PRD file
 
-Before anything else, check if a main PRD (`docs/agents/issues/prd.md`) already exists:
+Before anything else, check whether `.okf/` exists.
+
+- **If `.okf/` exists:** do not start from a blank user description. Ask which bounded capability should receive or refresh a PRD, then read the selected capability node, its parent, relevant siblings when needed, and any linked shared concepts before writing. Interpret and mutate node fields through `$okf-planning-profile`.
+- **If `.okf/` does NOT exist:** do not invent the capability map here. Redirect the user to `fog-of-war-planning` so the territory is mapped first.
+
+Then check if a main PRD (`docs/agents/issues/prd.md`) already exists:
 
 - **If it exists:** Ask the user which sub-PRD file to write to (e.g., `docs/agents/issues/prd-payments.md`). The new feature will be written as a sub-PRD and linked from the main PRD.
 - **If it does NOT exist:** You will need to create both:
@@ -27,17 +36,27 @@ Before anything else, check if a main PRD (`docs/agents/issues/prd.md`) already 
 
   Ask the user for a short feature name to use in the filename (e.g., `prd-feeds.md`).
 
-### 2. Ask the user for a description
+### 2. Gather the bounded-capability inputs
 
-Ask the user for a long, detailed description of the problem they want to solve and any potential ideas for solutions.
+If `.okf/` exists, derive the starting context from the selected capability node and ask only for missing exactness.
+
+At minimum, establish:
+
+- which capability node owns this PRD
+- whether the node is already `bounded`
+- whether a linked PRD already exists and should be updated rather than created
+
+Ask the user for any additional implementation detail that is still missing.
 
 ### 3. Explore the repo
 
-Explore the repo to verify their assertions and understand the current state of the codebase.
+Explore the repo to verify the selected capability's current state, linked artifacts, and implementation surface.
 
 ### 4. Interview the user
 
-Interview the user relentlessly about every aspect of this plan until you reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one.
+If the selected capability is still broad or mixes multiple outcomes, stop and route back to `fog-of-war-planning` or `grill-me` rather than forcing a PRD.
+
+If the capability is bounded but not exact enough, use `grill-me-with-docs` behavior to tighten terminology, interfaces, and decisions before writing.
 
 ### 5. Sketch modules
 
@@ -47,13 +66,19 @@ A deep module (as opposed to a shallow module) is one which encapsulates a lot o
 
 Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
 
-### 6. Write the PRD files
+### 6. Write the PRD files and link them back to the graph
 
 Once you have a complete understanding of the problem and solution, write the PRD files.
 
 **For the sub-PRD** (`docs/agents/issues/prd-<feature>.md`), use the sub-PRD template below. Create the `docs/agents/issues/` directory if it doesn't exist. Do NOT submit a GitHub issue or call any external service.
 
 **If the main PRD does not exist**, also create `docs/agents/issues/prd.md` using the main PRD template below. If the main PRD already exists, update it to add a link to the new sub-PRD in the "Feature Sub-Documents" section.
+
+If `.okf/` exists, update the selected capability concept after writing through `$okf-planning-profile`, following the planning-profile contract:
+
+- set or refresh its `prd` reference
+- mark the capability `specified`
+- keep the concept body conceptual; do not copy PRD detail back into the concept
 
 <sub-prd-template>
 

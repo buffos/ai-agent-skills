@@ -8,6 +8,9 @@ description: Scaffold the standard docs/agents repository structure used by Buff
 Set up the standard `docs/agents/` structure that the repo workflow skills
 expect.
 
+This setup skill prepares the repo for planning and delivery workflows, but it
+does not author product-planning content itself.
+
 ## Bootstrap
 
 1. Inspect the repository root for an existing `docs/agents/` tree.
@@ -21,6 +24,8 @@ Create them only if they are missing.
 3. Create any missing directories from this baseline:
 
 ```text
+.okf/
+  workflows/
 docs/
   agents/
     adr/
@@ -39,6 +44,17 @@ tmp/
    place unless the user explicitly asks to migrate it.
 6. Treat bootstrap as idempotent: if a required file or directory already
    exists, skip it. Do not recreate it, overwrite it, or refresh its contents.
+
+Important for `.okf/` compatibility:
+
+- Create `.okf/workflows/` only as empty structure for workflow knowledge.
+- Do **not** create planning-map content in `.okf/` during baseline setup.
+- `fog-of-war-planning` should detect planning-profile nodes, not just the
+  presence of `.okf/`.
+- A brand-new repo should remain without `.okf/` until the planning workflow
+  creates the first root node and capability map.
+- If `.okf/` already exists, leave it in place and do not restructure it here
+  beyond ensuring `workflows/` exists when missing.
 
 Completion criterion: the full baseline directory tree exists, and the root
 `README.md`, `CODING_STANDARDS.md`, and `.gitignore` exist.
@@ -110,6 +126,22 @@ Before finishing, confirm the repo is ready for these skills:
 - `report-bug`
 - `grill-me-with-docs`
 - `domain-modeling`
+- `okf`
+- `okf-planning-profile`
+- `fog-of-war-planning`
 
 If one of them still expects a missing path, create the missing directory or
 starter file rather than leaving the repo half-configured.
+
+For `.okf`-related compatibility, use these rules:
+
+- The repo is compatible with `fog-of-war-planning` when `.okf/` is either
+  absent in a greenfield repo, present as a generic OKF bundle without planning
+  nodes yet, or already present as an existing planning bundle.
+- `.okf/workflows/` may exist without implying a planning graph exists.
+- Do not call the generic `okf` skill from bootstrap just to create starter
+  planning content.
+- Do not create placeholder `.okf` nodes, root concepts, capability concepts,
+  `index.md`, or `log.md` here.
+- The first real `.okf/` content should be created later by
+  `fog-of-war-planning` together with `okf-planning-profile`.

@@ -1,11 +1,13 @@
 ---
 name: report-bug
-description: Report and fully specify a bug through structured interrogation, then file it as a local issue. Use when user wants to report a bug, mentions "bug report", "found a bug", "something is broken", or invokes /report-bug.
+description: Report and fully specify a bug through structured interrogation, then file it as a local issue. Use when user wants to report a bug, mentions "bug report", "found a bug", "something is broken", or invokes /report-bug, while linking the bug back to the owning `.okf` concept when possible.
 ---
 
 # Report a Bug
 
 Interrogate the user about a bug until it is fully specified, then create the issue file and register it.
+
+If `.okf/` exists, use `$okf-planning-profile` and read [../../../experimenting/okf-planning-profile/REFERENCE.md](../../../experimenting/okf-planning-profile/REFERENCE.md) before resolving concept ownership or writing issue links back into the graph.
 
 ## Process
 
@@ -63,6 +65,8 @@ Also determine which **PRD sub-document** this bug relates to:
 - Map it to the correct sub-PRD filename (e.g., `prd-youtube.md`, `prd-email.md`, `prd-feeds.md`, or `prd.md` for cross-cutting/standalone bugs)
 - If unsure, ask the user which feature area the bug belongs to
 
+If `.okf/` exists, also resolve the owning capability or shared concept when possible. Prefer the narrowest concept that actually owns the behavior. If the bug spans multiple capabilities, use the relevant shared concept or a cross-cutting node, following `$okf-planning-profile` graph semantics.
+
 ### 5. Create the issue file
 
 **Numbering:** Read the `# Current Max Issue ID` section at the bottom of `docs/agents/issues/issues.md`. The value there is the highest issue number ever assigned. The new issue number is `max + 1`. If the section or file does not exist, fall back to scanning `docs/agents/issues/pending/` and `docs/agents/issues/done/` for the highest existing number.
@@ -105,6 +109,8 @@ Append a new row to `docs/agents/issues/issues.md` (or create the file if it doe
 - Fully specified → `ready-for-agent`
 - Needs human judgment to fix → `ready-for-human`
 - Missing info despite grilling → `needs-info`
+
+If `.okf/` exists, append the created bug issue path to the owning concept node's `issues` references after the issue file is created through `$okf-planning-profile`, using the planning profile contract for the node shape.
 
 ### 7. Update the max issue ID
 
