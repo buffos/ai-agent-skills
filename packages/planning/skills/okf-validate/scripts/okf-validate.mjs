@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { createRequire } from "node:module";
 import path from "node:path";
 import process from "node:process";
@@ -31,25 +31,69 @@ class Report {
   }
 }
 
-async function loadYaml() {
+function npmExecutable() {
+  return process.platform === "win32" ? "npm.cmd" : "npm";
+}
+
+function globalModuleRoots() {
+  const roots = new Set();
+  const add = (value) => {
+    if (typeof value === "string" && value.trim()) {
+      roots.add(path.resolve(value.trim()));
+    }
+  };
+
+  add(process.env.npm_config_prefix && path.join(process.env.npm_config_prefix, "node_modules"));
+
+  if (process.platform === "win32") {
+    add(process.env.APPDATA && path.join(process.env.APPDATA, "npm", "node_modules"));
+  } else {
+    add(process.env.HOME && path.join(process.env.HOME, ".npm-global", "lib", "node_modules"));
+    add(process.env.HOME && path.join(process.env.HOME, ".local", "lib", "node_modules"));
+  }
+
   try {
-    const globalRoot = execFileSync(npmExecutable(), ["root", "-g"], {
+    add(execSync(`${npmExecutable()} root -g`, {
       encoding: "utf8",
-      stdio: ["ignore", "pipe", "pipe"],
-    }).trim();
-    const requireFromGlobal = createRequire(path.join(globalRoot, "__okf_validate__.cjs"));
-    return requireFromGlobal("yaml");
+      stdio: ["ignore", "pipe", "ignore"],
+      shell: true,
+    }));
   } catch {
+    // Fall back to the common global roots above.
+  }
+
+  return [...roots];
+}
+
+async function loadYaml() {
+  const requireLocal = createRequire(import.meta.url);
+
+  try {
+    return requireLocal("yaml");
+  } catch {
+    // Fall back to global module roots.
+  }
+
+  try {
+    for (const globalRoot of globalModuleRoots()) {
+      try {
+        const requireFromGlobal = createRequire(path.join(globalRoot, "__okf_validate__.cjs"));
+        return requireFromGlobal("yaml");
+      } catch {
+        // Try the next candidate root.
+      }
+    }
+  } catch {
+    // Fall through to the installation guidance below.
+  }
+
+  {
     console.error("Missing global Node.js package: yaml");
     console.error("");
     console.error("Install it with:");
     console.error("npm install -g yaml");
     process.exit(1);
   }
-}
-
-function npmExecutable() {
-  return process.platform === "win32" ? "npm.cmd" : "npm";
 }
 
 function splitFrontmatter(text) {

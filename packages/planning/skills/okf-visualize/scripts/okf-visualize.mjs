@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { createRequire } from "node:module";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -11,20 +11,69 @@ const RESERVED = new Set(["index.md", "log.md"]);
 const FENCE = /^(```|~~~)/;
 const LINK = /(?<!\!)\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
 const LAYOUTS = new Set(["force", "radial", "grid"]);
+const LAYOUT_ALIASES = {
+  force: "cose",
+  radial: "concentric",
+  grid: "grid",
+};
 
 function npmExecutable() {
   return process.platform === "win32" ? "npm.cmd" : "npm";
 }
 
-async function loadYaml() {
+function globalModuleRoots() {
+  const roots = new Set();
+  const add = (value) => {
+    if (typeof value === "string" && value.trim()) {
+      roots.add(path.resolve(value.trim()));
+    }
+  };
+
+  add(process.env.npm_config_prefix && path.join(process.env.npm_config_prefix, "node_modules"));
+
+  if (process.platform === "win32") {
+    add(process.env.APPDATA && path.join(process.env.APPDATA, "npm", "node_modules"));
+  } else {
+    add(process.env.HOME && path.join(process.env.HOME, ".npm-global", "lib", "node_modules"));
+    add(process.env.HOME && path.join(process.env.HOME, ".local", "lib", "node_modules"));
+  }
+
   try {
-    const globalRoot = execFileSync(npmExecutable(), ["root", "-g"], {
+    add(execSync(`${npmExecutable()} root -g`, {
       encoding: "utf8",
-      stdio: ["ignore", "pipe", "pipe"],
-    }).trim();
-    const requireFromGlobal = createRequire(path.join(globalRoot, "__okf_visualize__.cjs"));
-    return requireFromGlobal("yaml");
+      stdio: ["ignore", "pipe", "ignore"],
+      shell: true,
+    }));
   } catch {
+    // Fall back to the common global roots above.
+  }
+
+  return [...roots];
+}
+
+async function loadYaml() {
+  const requireLocal = createRequire(import.meta.url);
+
+  try {
+    return requireLocal("yaml");
+  } catch {
+    // Fall back to global module roots.
+  }
+
+  try {
+    for (const globalRoot of globalModuleRoots()) {
+      try {
+        const requireFromGlobal = createRequire(path.join(globalRoot, "__okf_visualize__.cjs"));
+        return requireFromGlobal("yaml");
+      } catch {
+        // Try the next candidate root.
+      }
+    }
+  } catch {
+    // Fall through to the installation guidance below.
+  }
+
+  {
     console.error("Missing global Node.js package: yaml");
     console.error("");
     console.error("Install it with:");
@@ -230,7 +279,12 @@ function parseArgs(argv) {
 async function renderHtml({ title, sourceLink, layout, nodes, edges, bundleName }) {
   const safeTitle = escapeHtml(title || bundleName);
   const safeLink = sourceLink ? `<a class="src" href="${escapeHtml(sourceLink)}" target="_blank" rel="noopener">source</a>` : "";
-  const payload = JSON.stringify({ nodes, edges, layout });
+  const payload = JSON.stringify({
+    nodes,
+    edges,
+    layout,
+    initialLayout: LAYOUT_ALIASES[layout] ?? "cose",
+  });
   const vendorDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "vendor");
   const [cytoscapeSource, markedSource] = await Promise.all([
     fs.readFile(path.join(vendorDir, "cytoscape.min.js"), "utf8"),
@@ -306,7 +360,7 @@ const typeSelect=document.getElementById("type");
 const layoutSelect=document.getElementById("layout");
 const legend=document.getElementById("legend");
 const PALETTE=["#0d6b78","#9c4f2f","#4f772d","#4c5c96","#b7791f","#8a365f","#2f7f6d","#7c5e10","#6b4bb8","#6f4e37"];
-layoutSelect.value=DATA.layout;
+layoutSelect.value=DATA.initialLayout;
 const byId=Object.fromEntries(DATA.nodes.map(node=>[node.id,node]));
 const outgoing={}, incoming={};
 DATA.nodes.forEach(node=>{outgoing[node.id]=[];incoming[node.id]=[];});
@@ -337,7 +391,7 @@ legend.querySelectorAll(".chip").forEach(button=>{
 });
 const cy=cytoscape({
   container:document.getElementById("cy"),
-  minZoom:.2,maxZoom:1.6,wheelSensitivity:.2,
+  minZoom:.2,maxZoom:1.6,
   elements:[
     ...DATA.nodes.map(node=>({data:{...node,color:typeColor[node.type],size:Math.max(24, Math.min(70, 24 + Math.floor((node.bodyLength||0)/200)))}})),
     ...DATA.edges.map(edge=>({data:edge}))
@@ -356,7 +410,7 @@ const cy=cytoscape({
     {selector:".dim",style:{"opacity":.12}},
     {selector:".hl",style:{"border-width":4,"border-color":"#ffffff"}}
   ],
-  layout:{name:DATA.layout,animate:false,nodeRepulsion:9000,idealEdgeLength:90,padding:40}
+  layout:{name:DATA.initialLayout,animate:false,nodeRepulsion:9000,idealEdgeLength:90,padding:40}
 });
 
 search.addEventListener("input",applyFilter);

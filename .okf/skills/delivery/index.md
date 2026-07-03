@@ -1,0 +1,7 @@
+# Delivery Skills
+
+* [prd-to-issues](./prd-to-issues.md) - Break a PRD into independently-workable issues and write each as a local markdown file in docs/agents/issues/pending. Use when the user wants to turn a capability PRD into concrete tasks while respecting the `.okf` planning graph.
+* [process-issue](./process-issue.md) - Implement a specific issue by number or auto-select the next non-blocking issue from the registry. Use when user wants to process, implement, work on, pick up, or start an issue, or says "next issue", while keeping any `.okf` capability graph current.
+* [repo-buffos-setup](./repo-buffos-setup.md) - Scaffold the standard docs/agents repository structure used by Buffo's workflow skills. Use when starting a new project, bootstrapping repo documentation structure, or repairing a repo so issue, PRD, ADR, and context skills can work consistently.
+* [report-bug](./report-bug.md) - Report and fully specify a bug through structured interrogation, then file it as a local issue. Use when user wants to report a bug, mentions "bug report", "found a bug", "something is broken", or invokes /report-bug, while linking the bug back to the owning `.okf` concept when possible.
+* [triage](./triage.md) - Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.
