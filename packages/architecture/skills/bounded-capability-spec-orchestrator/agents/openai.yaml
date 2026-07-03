@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bounded Capability Spec Orchestrator"
+  short_description: "Coordinate bounded-capability exact-spec work"
+  default_prompt: "Use $bounded-capability-spec-orchestrator to drive bounded-capability exact-spec work, produce the core reference documents, and route the work through review before implementation starts."

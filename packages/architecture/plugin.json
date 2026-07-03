@@ -1,0 +1,10 @@
+{
+  "name": "architecture",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for reference-document architecture design, review, and issue-driven implementation planning.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}

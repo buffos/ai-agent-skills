@@ -1,0 +1,10 @@
+{
+  "name": "productivity",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for personal use.",
+  "author": {
+    "name": "Kostas Oraiopoulos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}

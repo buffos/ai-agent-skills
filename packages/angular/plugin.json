@@ -1,0 +1,10 @@
+{
+  "name": "angular",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for angular use.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}

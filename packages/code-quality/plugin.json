@@ -1,0 +1,10 @@
+{
+  "name": "code-quality",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for code review, design quality, and test-first engineering work.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}

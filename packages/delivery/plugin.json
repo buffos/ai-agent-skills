@@ -1,0 +1,10 @@
+{
+  "name": "delivery",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for issue setup, PRD slicing, triage, and issue-driven delivery workflows.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}
