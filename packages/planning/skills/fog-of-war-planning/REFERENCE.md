@@ -44,8 +44,10 @@ Offer grounded paths such as:
 - clear fog from code on an existing node
 - organize or reshape the map
 - tighten a `bounded` capability
+- tighten a `bounded` capability from code
 - add a new capability
 - hand off a bounded capability to architecture spec work
+- verify implemented from code
 - maintenance only
 
 Do not ask an ungrounded generic opener when the graph already exists.
@@ -119,6 +121,43 @@ Use this mode for confirmed topology work such as:
 
 Use this mode when the node is no longer broad territory and should move toward
 exact language, exact specification, and implementation-ready artifact work.
+
+### `tighten a bounded node from code`
+
+Use this mode for brownfield repos when a node is already `bounded` and the
+goal is to move it toward `specified` by grounding exact artifacts in the
+existing implementation.
+
+Allowed actions:
+
+- inspect code first
+- summarize current implemented behavior for the node
+- generate or refresh exact-spec understanding from code and docs
+- surface gaps between current code and intended target behavior
+
+Required behavior:
+
+- distinguish current implementation from desired design
+- identify whether the exact artifact set for `specified` now exists
+- recommend `specified` only when those artifacts are present and aligned enough
+
+### `verify implemented from code`
+
+Use this mode when a node is already `specified` and the goal is to verify
+whether its scoped work is actually exhausted in the codebase.
+
+Allowed actions:
+
+- inspect linked issues
+- inspect implementation evidence
+- inspect tests and validation evidence
+- compare scoped artifacts against implemented behavior
+
+Required behavior:
+
+- verify completion against the node's actual scope
+- distinguish partially implemented from truly exhausted scope
+- recommend `implemented` only when the node's scoped work is genuinely done
 
 ## Frontier selection
 
@@ -235,6 +274,13 @@ If code and user intent disagree:
 - record current implementation as current behavior
 - record desired behavior as target state or planned change
 - do not collapse the two into one misleading node description
+
+For brownfield transition work, the orchestrator should also answer:
+
+3. do the exact-spec artifacts reflect the current implementation well enough
+   for `specified`?
+4. is the specified scope actually exhausted in code well enough for
+   `implemented`?
 
 ## Existing-skill integration targets
 

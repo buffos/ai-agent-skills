@@ -23,6 +23,18 @@ Use `clear fog from code on an existing node` when:
 - the node should reflect current implemented reality
 - the user wants to migrate or verify a brownfield area into the graph
 
+Use `tighten a bounded node from code` when:
+
+- the node is already `bounded`
+- the next goal is `specified`
+- exact artifacts should be grounded in existing implementation
+
+Use `verify implemented from code` when:
+
+- the node is already `specified`
+- the next goal is `implemented`
+- completion must be verified from code, issues, and tests rather than assumed
+
 ## Evidence Order
 
 For current-state questions, inspect in this order when relevant:
@@ -74,3 +86,9 @@ If needed, the node can later point to both:
 
 Brownfield fog-clearing should make the graph trustworthy as a map of the repo
 as it exists today, while still making room for future design and extension.
+
+Brownfield transition work should also make state changes trustworthy:
+
+- `foggy -> bounded` from clarified current behavior
+- `bounded -> specified` from code-grounded exact artifacts
+- `specified -> implemented` from verified scope exhaustion

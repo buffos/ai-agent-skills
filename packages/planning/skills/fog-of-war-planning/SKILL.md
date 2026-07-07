@@ -1,6 +1,6 @@
 ---
 name: fog-of-war-planning
-description: Orchestrates `.okf`-first planning: map capability topology, clear fog, and route bounded nodes into exact specification and delivery workflows.
+description: Orchestrate `.okf` planning: map capability topology, clear fog, and route nodes into specification or delivery.
 disable-model-invocation: true
 ---
 
@@ -62,8 +62,10 @@ Offer grounded modes such as:
 - clear fog from code on an existing node
 - organize or reshape the map
 - tighten a bounded node
+- tighten a bounded node from code
 - add a new capability
 - hand off a bounded node to architecture spec work
+- verify implemented from code
 - maintenance only
 
 Do not silently choose "the next foggy node".
@@ -172,27 +174,19 @@ into `organize or reshape the map` or equivalent confirmation to write.
 
 ### 9a. Enforce brownfield code-grounding discipline
 
-In `clear fog from code` mode, inspect implementation evidence before asking
-questions that the code can already answer.
+For all brownfield modes, read [BROWNFIELD.md](./BROWNFIELD.md) and ground the
+node in implementation evidence before asking questions the code can already
+answer.
 
-Build a small evidence set first, such as:
+Use:
 
-- routes, handlers, or CLI entrypoints
-- models, schemas, migrations, or persisted artifacts
-- services, orchestrators, and background jobs
-- tests that reveal intended current behavior
-- nearby docs such as PRDs, ADRs, or context files
+- `clear fog from code on an existing node` for brownfield `foggy -> bounded`
+- `tighten a bounded node from code` for brownfield `bounded -> specified`
+- `verify implemented from code` for brownfield `specified -> implemented`
 
-In this mode, distinguish explicitly between:
-
-- `observed current behavior`
-- `inferred from docs`
-- `user-confirmed target behavior`
-- `code/docs mismatch`
-
-Do not let future design answers silently overwrite observed current behavior.
-If the user wants behavior that differs from the code, surface it as target
-state or drift, not as already-implemented truth.
+Distinguish current implementation, documented intent, target behavior, and
+mismatches. Do not let future design answers silently overwrite observed
+current behavior.
 
 ### 10. Decide when a node can leave pure fog clearing
 

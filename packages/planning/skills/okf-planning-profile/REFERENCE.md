@@ -255,8 +255,10 @@ Recommended modes:
 - clear fog from code on an existing node
 - organize or reshape the map
 - tighten a bounded node
+- tighten a bounded node from code
 - add a new capability
 - hand off a bounded node to PRD work
+- verify implemented from code
 - maintenance only
 
 In `clear fog` mode, no durable topology writes should happen until the user
@@ -269,6 +271,14 @@ implemented behavior first and distinguish:
 - documented intended behavior
 - future target behavior
 - mismatches among them
+
+In `tighten a bounded node from code` mode, the orchestrator should use current
+implementation evidence to decide whether the node can move from `bounded` to
+`specified`.
+
+In `verify implemented from code` mode, the orchestrator should use code,
+linked issues, and validation evidence to decide whether the node can move from
+`specified` to `implemented`.
 
 ## Shared-concern promotion rule
 
