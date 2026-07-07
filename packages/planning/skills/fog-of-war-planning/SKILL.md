@@ -1,6 +1,6 @@
 ---
 name: fog-of-war-planning
-description: Map a product idea into a capability graph, then route bounded territory into exact specification and implementation workflows.
+description: Orchestrates `.okf`-first planning: map capability topology, clear fog, and route bounded nodes into exact specification and delivery workflows.
 disable-model-invocation: true
 ---
 
@@ -12,10 +12,13 @@ This skill is the entrypoint for greenfield product planning when the repo shoul
 
 This skill depends on `$okf-planning-profile` for the canonical planning-node shape and `.okf` planning semantics.
 
-Before non-trivial work, read both:
+Before non-trivial work, read:
 
 - [REFERENCE.md](./REFERENCE.md)
 - [../okf-planning-profile/REFERENCE.md](../okf-planning-profile/REFERENCE.md)
+
+Also read [BROWNFIELD.md](./BROWNFIELD.md) when the repo already has meaningful
+code and the goal is to align the graph with implemented behavior.
 
 When writing or updating planning-map concepts, use [../okf-planning-profile/templates/project-planning-concept.md](../okf-planning-profile/templates/project-planning-concept.md) as the starting template.
 Use `$okf-planning-profile` whenever this workflow needs to create, update, split, link, or advance planning-map nodes.
@@ -56,6 +59,7 @@ before doing substantive work.
 Offer grounded modes such as:
 
 - clear fog on an existing node
+- clear fog from code on an existing node
 - organize or reshape the map
 - tighten a bounded node
 - add a new capability
@@ -165,6 +169,30 @@ In `clear fog` mode, the skill must not:
 
 Those actions require explicit confirmation and, when topology changes, a shift
 into `organize or reshape the map` or equivalent confirmation to write.
+
+### 9a. Enforce brownfield code-grounding discipline
+
+In `clear fog from code` mode, inspect implementation evidence before asking
+questions that the code can already answer.
+
+Build a small evidence set first, such as:
+
+- routes, handlers, or CLI entrypoints
+- models, schemas, migrations, or persisted artifacts
+- services, orchestrators, and background jobs
+- tests that reveal intended current behavior
+- nearby docs such as PRDs, ADRs, or context files
+
+In this mode, distinguish explicitly between:
+
+- `observed current behavior`
+- `inferred from docs`
+- `user-confirmed target behavior`
+- `code/docs mismatch`
+
+Do not let future design answers silently overwrite observed current behavior.
+If the user wants behavior that differs from the code, surface it as target
+state or drift, not as already-implemented truth.
 
 ### 10. Decide when a node can leave pure fog clearing
 

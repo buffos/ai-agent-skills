@@ -252,6 +252,7 @@ frontier rather than assuming the next node to touch.
 Recommended modes:
 
 - clear fog on an existing node
+- clear fog from code on an existing node
 - organize or reshape the map
 - tighten a bounded node
 - add a new capability
@@ -260,6 +261,14 @@ Recommended modes:
 
 In `clear fog` mode, no durable topology writes should happen until the user
 confirms the proposed structural change.
+
+In `clear fog from code` mode, the orchestrator should ground the node in
+implemented behavior first and distinguish:
+
+- current implemented behavior
+- documented intended behavior
+- future target behavior
+- mismatches among them
 
 ## Shared-concern promotion rule
 

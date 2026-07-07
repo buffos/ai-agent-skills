@@ -30,6 +30,21 @@ It is the planning authority, not the exact-spec authoring layer.
 - `specified` -> issue slicing or targeted artifact refresh
 - `implemented` -> maintenance only
 
+## Brownfield Mode
+
+`clear fog from code on an existing node` is the explicit brownfield mode.
+
+Use it when the goal is to align the graph with implemented behavior before
+deciding what should change next.
+
+In this mode, the skill should:
+
+- inspect code first
+- summarize observed current behavior
+- ask only what code cannot answer
+- distinguish current behavior from future intended behavior
+- surface mismatches instead of hiding them
+
 ## Bounded Node Decision Point
 
 When a node becomes `bounded`, recommend one of:

@@ -41,6 +41,7 @@ explicit mode choice.
 Offer grounded paths such as:
 
 - clear fog on an existing node
+- clear fog from code on an existing node
 - organize or reshape the map
 - tighten a `bounded` capability
 - add a new capability
@@ -79,6 +80,31 @@ Disallowed actions unless separately confirmed:
 - shared-concern promotion
 - structural splits
 - state advancement based only on inference
+
+### `clear fog from code`
+
+Use this mode for brownfield repos when the question is not just what the user
+wants, but what the existing code already does.
+
+Allowed actions:
+
+- inspect code first
+- summarize observed current behavior
+- ask only the questions that code and local docs do not settle
+- surface mismatches between code, docs, and user intent
+
+Required behavior:
+
+- label conclusions as `observed in code`, `inferred from docs`,
+  `user-confirmed target behavior`, or `mismatch`
+- treat current implementation and future design as separate truths when they
+  diverge
+
+Disallowed behavior:
+
+- asking the user for answers that are already discoverable in local code
+- rewriting current behavior in the graph as if target behavior were already
+  implemented
 
 ### `organize or reshape the map`
 
@@ -187,6 +213,28 @@ Recommend this when:
 
 This decision point should be explicit whenever a node enters or is selected in
 the `bounded` state.
+
+## Brownfield verification contract
+
+For brownfield work, the orchestrator should answer two separate questions:
+
+1. what does the code do now?
+2. what should the graph say we want next?
+
+Use implementation evidence first for current-state questions.
+
+If code and docs disagree:
+
+- do not silently choose one
+- surface the conflict
+- let the user decide whether the node should reflect current reality, target
+  design, or both
+
+If code and user intent disagree:
+
+- record current implementation as current behavior
+- record desired behavior as target state or planned change
+- do not collapse the two into one misleading node description
 
 ## Existing-skill integration targets
 
