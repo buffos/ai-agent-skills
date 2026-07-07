@@ -31,6 +31,12 @@ Extract:
 - exception paths
 - externally visible outcomes
 
+For user-visible capabilities, also extract the intended exposure surface:
+
+- what the user can actually reach
+- what the user can actually see or trigger
+- what observable result proves the behavior is exposed on the product surface
+
 ### 2. Identify Scenario-Worthy Behaviors
 
 Not every requirement deserves its own canonical scenario.
@@ -43,6 +49,7 @@ Prioritize behaviors that:
 - involve failure or blocked outcomes
 - exercise retry-sensitive or state-sensitive behavior
 - matter for architecture comparison fairness
+- would be falsely "complete" if implemented only behind the product surface
 
 Use [references/scenario-selection.md](references/scenario-selection.md).
 
@@ -59,6 +66,8 @@ A strong scenario set should include:
 
 If the scenario set only proves the happy path, it is weak.
 
+If the capability is user-visible but the scenario set does not prove product-surface reachability, it is also weak.
+
 ### 4. Write Scenarios in Stable Behavioral Language
 
 Prefer concise scenario statements using structures like:
@@ -71,6 +80,9 @@ Keep the language:
 - business-centered
 - implementation-neutral
 - externally observable
+
+For user-visible behavior, ensure the outcome is observable from the actual
+product surface, not just inferable from backend state or API existence.
 
 Do not write assertions that depend on package layout or persistence internals.
 
@@ -86,6 +98,9 @@ Each scenario should make clear:
 - what outcome must be visible
 
 If a scenario exists only as a vague workflow summary, sharpen it.
+
+If a scenario would still pass while the behavior sits behind the product
+surface, sharpen it until that gap would fail the scenario.
 
 ### 6. Preserve Comparison Stability
 
@@ -105,6 +120,12 @@ Acceptance scenarios are not only about commands. Some should cover:
 - low-stock or operational summaries
 
 If these are part of the product behavior, scenario coverage should include them.
+
+Also include reachability scenarios when relevant, such as:
+
+- the user can discover the feature from the intended surface
+- the user can trigger it end to end
+- the user can observe the result or failure from that surface
 
 ### 8. Run the Scenario Quality Gate
 
@@ -171,6 +192,8 @@ Do not:
 - depend on internal object structures
 - mistake long step-by-step UI procedures for acceptance behavior
 - omit reports or read models if they are part of product value
+- allow a user-visible feature to appear complete when the scenario only proves
+  behavior behind the product surface
 
 ## Output Contract
 

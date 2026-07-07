@@ -39,6 +39,7 @@ Prioritize:
 - misaligned statuses or error vocabularies
 - architectural bias that will distort comparisons
 - missing testability anchors
+- user-visible behaviors that may remain behind the product surface
 
 ### 3. Check Cross-Document Consistency
 
@@ -67,6 +68,9 @@ Review whether they preserve:
 - one stable use-case surface
 - one stable external contract
 
+Also review whether user-visible behavior is specified as reachable on the
+product surface, not merely available in backend logic or transport contract.
+
 If the documents leave too much room for architecture variants to change product behavior, flag it.
 
 ### 5. Check Missing Decisions and Unbounded Assumptions
@@ -82,6 +86,9 @@ Look for places where the documents say or imply:
 Use [references/readiness-criteria.md](references/readiness-criteria.md).
 
 If a gap will materially affect implementation shape or comparison fairness, it is review-worthy.
+
+Treat behavior that remains behind the product surface as a real readiness gap,
+not polish.
 
 ### 6. Check Architecture Neutrality
 
@@ -106,6 +113,9 @@ Review whether the artifacts support:
 - domain rule tests
 - contract tests
 - comparison tests across architectures
+
+For user-visible features, also review whether the artifacts support tests that
+would fail if the behavior remained behind the product surface.
 
 If a requirement or workflow cannot be tested from the existing docs, flag that gap.
 
@@ -143,9 +153,16 @@ Good:
 
 - “The PRD defines return eligibility broadly, but the domain model adds return-window behavior that is not grounded in the PRD. This can lead to architecture variants implementing different return rules.”
 
+- “The contract and use-case model define archive behavior, but the acceptance
+  scenarios never require a user-facing path to trigger or observe it. This
+  allows the behavior to remain behind the product surface.”
+
 ### Treat Missing Behavior as a Real Risk
 
 An omitted failure path or state transition is often more dangerous than a minor wording issue.
+
+An omitted product-surface exposure path for user-visible behavior is also a
+real defect.
 
 ### Prioritize Comparison Integrity
 
@@ -172,6 +189,8 @@ Do not:
 - report generic concerns without showing why they matter
 - invent contradictions where there are only different levels of abstraction
 - treat unresolved but explicit assumptions as if they were hidden defects
+- treat promised user-visible behavior behind the product surface as a mere
+  frontend follow-up
 
 ## Output Contract
 

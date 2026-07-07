@@ -72,6 +72,8 @@ Rules:
 - a completed slice must be demoable or verifiable on its own
 - prefer many thin slices over few thick ones
 - do not create horizontal layer-only issues unless the work is genuinely cross-cutting and cannot be sliced vertically
+- for user-visible behavior, do not accept a slice that leaves the behavior
+  behind the product surface
 
 Possible slice types:
 
@@ -93,6 +95,10 @@ Each proposed issue should be anchored to whichever of these exist:
 
 Do not create issues that float free from the reference documents.
 
+If acceptance scenarios or use cases imply user-visible reachability, the issue
+must include the work needed to make that behavior reachable and observable on
+the product surface.
+
 ### 5. Present the Breakdown for Approval
 
 Before writing files, present the proposed breakdown as a numbered list.
@@ -104,6 +110,8 @@ For each slice, show:
 - **Blocked by**
 - **Artifacts covered**
 - **Acceptance scenarios covered** when available
+- **Exposure note**: whether the slice includes the user-facing exposure path
+  or is intentionally non-user-facing
 
 Ask the user:
 
@@ -113,6 +121,9 @@ Ask the user:
 - Are the right slices marked `AFK` and `HITL`?
 
 Iterate until the user approves the breakdown.
+
+Reject and revise any proposed slice for user-visible behavior when it would
+allow the behavior to remain behind the product surface.
 
 ### 6. Create the Issue Files
 
@@ -161,6 +172,10 @@ Each issue file must include:
 - artifact anchors
 - acceptance scenarios addressed
 
+For user-visible slices, the issue must also make the exposure obligation
+explicit in the `What to build` or acceptance criteria so the slice cannot be
+closed while the feature remains behind the product surface.
+
 If some artifact types do not exist, omit only the irrelevant references.
 
 ### 8. Create or Update the Issues Registry
@@ -204,6 +219,10 @@ Instead:
 - generate only the missing or corrective slices
 - create explicit spec-alignment issues when implementation and reference docs differ
 
+If brownfield code already implements behavior behind the product surface,
+generate the missing exposure slice rather than treating the feature as
+complete.
+
 If the artifact set is weak, route back to:
 
 - `requirements-gap-analyzer`
@@ -221,6 +240,8 @@ Do not:
 - ignore acceptance scenarios
 - ignore readiness-review findings
 - create issue files before the user approves the breakdown
+- let a user-visible feature be considered covered while it remains behind the
+  product surface
 
 ## Output Contract
 
@@ -232,6 +253,9 @@ Produce:
 - an updated max issue ID
 - issue rows and issue files that agree on owning capability, artifact root, and issue path
 - when `.okf/` exists, appended `issues` references on the owning capability node
+
+For user-visible capabilities, the issue set should make it impossible to mark
+the capability complete while the feature remains behind the product surface.
 
 If the artifact set is not strong enough, stop and report which upstream artifact must be fixed first.
 
