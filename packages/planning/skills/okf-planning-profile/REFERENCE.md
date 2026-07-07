@@ -276,9 +276,15 @@ In `tighten a bounded node from code` mode, the orchestrator should use current
 implementation evidence to decide whether the node can move from `bounded` to
 `specified`.
 
+If important specification gaps remain unresolved after code inspection, the
+node should remain `bounded`.
+
 In `verify implemented from code` mode, the orchestrator should use code,
 linked issues, and validation evidence to decide whether the node can move from
 `specified` to `implemented`.
+
+If important completion or scope-exhaustion questions remain unresolved after
+code inspection, the node should remain `specified`.
 
 ## Shared-concern promotion rule
 

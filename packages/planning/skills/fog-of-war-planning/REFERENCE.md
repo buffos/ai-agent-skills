@@ -140,6 +140,8 @@ Required behavior:
 - distinguish current implementation from desired design
 - identify whether the exact artifact set for `specified` now exists
 - recommend `specified` only when those artifacts are present and aligned enough
+- keep the node `bounded` when important specification gaps still require
+  clarification
 
 ### `verify implemented from code`
 
@@ -158,6 +160,8 @@ Required behavior:
 - verify completion against the node's actual scope
 - distinguish partially implemented from truly exhausted scope
 - recommend `implemented` only when the node's scoped work is genuinely done
+- keep the node `specified` when important completion or scope-exhaustion
+  questions still remain unresolved after code inspection
 
 ## Frontier selection
 
@@ -281,6 +285,15 @@ For brownfield transition work, the orchestrator should also answer:
    for `specified`?
 4. is the specified scope actually exhausted in code well enough for
    `implemented`?
+
+If important specification questions remain open after code inspection, the
+node stays `bounded`. Code grounding can reduce uncertainty, but it does not
+justify `specified` while material clarification gaps still exist.
+
+If important completion questions remain open after code inspection, the node
+stays `specified`. Existing code can support the decision, but it does not
+justify `implemented` while material uncertainty remains about whether the
+node's scoped work is actually exhausted.
 
 ## Existing-skill integration targets
 

@@ -29,11 +29,17 @@ Use `tighten a bounded node from code` when:
 - the next goal is `specified`
 - exact artifacts should be grounded in existing implementation
 
+If important specification gaps remain after code inspection, the node stays
+`bounded` until those gaps are clarified.
+
 Use `verify implemented from code` when:
 
 - the node is already `specified`
 - the next goal is `implemented`
 - completion must be verified from code, issues, and tests rather than assumed
+
+If important completion gaps remain after code, issue, and test inspection,
+the node stays `specified` until those gaps are clarified.
 
 ## Evidence Order
 
@@ -92,3 +98,9 @@ Brownfield transition work should also make state changes trustworthy:
 - `foggy -> bounded` from clarified current behavior
 - `bounded -> specified` from code-grounded exact artifacts
 - `specified -> implemented` from verified scope exhaustion
+
+`bounded -> specified` should not happen if the exact artifacts still depend on
+unresolved clarification outside the code.
+
+`specified -> implemented` should not happen if the evidence still leaves
+material doubt about whether the node's scoped work is actually complete.
