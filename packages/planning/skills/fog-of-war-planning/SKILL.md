@@ -132,3 +132,23 @@ Whenever a node changes planning state, report:
 - old state
 - new state
 - current totals of `foggy`, `bounded`, `specified`, and `implemented`
+
+When brownfield verification discovers that an `implemented` node still misses
+behavior already promised by its current scope, the node must be demoted to
+`specified`. Do not leave the node `implemented` and merely note the mismatch.
+
+This reopen flow is mandatory and incomplete until all of the following are
+done:
+
+- record the mismatch in the owning capability node using brownfield labels
+- create or identify the owning pending issue in `docs/agents/issues/pending/`
+- append that pending issue path to the owning capability node's `issues:`
+  references
+- update `docs/agents/issues/issues.md`
+- update `# Current Max Issue ID` in `docs/agents/issues/issues.md`
+- append a durable mismatch/state-change entry to `.okf/log.md`
+
+Do not create orphan pending issue files.
+
+Required action: update # Current Max Issue ID in
+`docs/agents/issues/issues.md`.

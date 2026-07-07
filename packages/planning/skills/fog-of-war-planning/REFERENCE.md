@@ -332,6 +332,96 @@ stays `specified`. Existing code can support the decision, but it does not
 justify `implemented` while material uncertainty remains about whether the
 node's scoped work is actually exhausted.
 
+## Mismatch Reopen Contract
+
+Use this contract when brownfield inspection shows that a node previously marked
+`implemented` does not actually deliver behavior already promised by its
+current scope.
+
+### Required decision
+
+If the missing behavior is inside the node's existing promised scope:
+
+- record it as a `mismatch`
+- demote the node from implemented to specified
+- create or identify delivery work for the gap
+
+Do not keep the node `implemented` just because most of its scope exists.
+
+If the behavior is truly net-new scope outside the current node:
+
+- keep the node's current state
+- route through `add or extend a feature in an existing node`
+
+### Required labels
+
+When reopening a node, summarize the gap using all four labels:
+
+- `observed in code`
+- `inferred from docs`
+- `mismatch`
+- `required follow-up`
+
+### Owning-node rule
+
+The owning node for a mismatch should be:
+
+- the narrowest capability whose promised scope already includes the missing behavior
+
+If no child cleanly owns the gap:
+
+- reopen the parent node
+
+If multiple nodes are affected:
+
+- choose one owning node for the delivery issue
+- cross-link related nodes explicitly if needed
+
+### Delivery bookkeeping
+
+When mismatch follow-up requires a new pending issue, the orchestrator must:
+
+1. read `docs/agents/issues/issues.md`
+2. read `# Current Max Issue ID`
+3. assign the next issue number as `max + 1`
+4. create the pending issue file in `docs/agents/issues/pending/`
+5. append a row to `docs/agents/issues/issues.md`
+6. update `# Current Max Issue ID`
+7. append the issue path to the owning capability node's `issues:` list
+8. append a mismatch/state-change entry to `.okf/log.md`
+
+The reopen flow is not complete until planning truth, delivery truth, traceability links, and audit trail are all synchronized.
+
+### Registry format
+
+When creating the registry row in `docs/agents/issues/issues.md`, use the same
+columns and state semantics as `$prd-to-issues`:
+
+- `#`
+- `Title`
+- `Category`
+- `PRD`
+- `State`
+- `Blocked by`
+
+For mismatch-driven implementation gaps inside an already-specified capability,
+default to:
+
+- `Category`: `feature`
+- `State`: `ready-for-agent`
+
+Unless the gap clearly needs human-only work or is still under-specified.
+
+### Required user-facing report
+
+Whenever a mismatch reopens a node, explicitly report:
+
+- the node
+- old state
+- new state
+- pending issue id/path
+- current totals of `foggy`, `bounded`, `specified`, and `implemented`
+
 ## Existing-skill integration targets
 
 These are follow-on changes for the existing skills.
@@ -350,6 +440,17 @@ These are follow-on changes for the existing skills.
 - Use graph context to avoid duplicate implementation tracks.
 - Write created issue links back into the capability concept.
 
+For mismatch-driven issue creation outside a normal `$prd-to-issues` run, reuse
+the same local issue conventions:
+
+- numbering from `# Current Max Issue ID`
+- row append behavior in `docs/agents/issues/issues.md`
+- issue template shape
+- state semantics such as `ready-for-agent` and `ready-for-human`
+
+`fog-of-war-planning` must not create pending issue files that bypass the local
+issue registry.
+
 ### `process-issue`
 
 - Read the linked capability concept before implementation.
@@ -361,6 +462,23 @@ These are follow-on changes for the existing skills.
 - Resolve the owning capability or shared concept when possible.
 - Keep issue creation in `docs/agents/issues/`.
 - Write the bug issue link back into the owning concept node.
+
+## Mismatch-Reopen Exit Checklist
+
+A mismatch-driven reopen is complete only if all of these are true:
+
+- the owning capability node records `observed in code`
+- the owning capability node records `inferred from docs`
+- the owning capability node records `mismatch`
+- the owning capability node records `required follow-up`
+- the node state has been demoted if promised scope is missing
+- the pending issue file exists
+- the issue path is linked from the owning node's `issues:` list
+- the issue row exists in `docs/agents/issues/issues.md`
+- `# Current Max Issue ID` is correct
+- `.okf/log.md` records both the mismatch and the state change
+
+Do not stop after updating only the node or only the issue file.
 
 ## Topology write policy
 

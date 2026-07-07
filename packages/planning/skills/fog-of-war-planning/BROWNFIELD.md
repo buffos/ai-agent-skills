@@ -104,3 +104,21 @@ unresolved clarification outside the code.
 
 `specified -> implemented` should not happen if the evidence still leaves
 material doubt about whether the node's scoped work is actually complete.
+
+## Reopen Rule
+
+Brownfield verification must be willing to reverse a previous planning-state
+decision when the evidence changes.
+
+If code inspection shows that an `implemented` node still lacks behavior
+already promised by its current scope:
+
+- treat that as a real mismatch
+- demote the node back to `specified`
+- create or identify a pending delivery issue
+- synchronize the capability node, issue registry, issue file, and `.okf` log
+
+Do not preserve `implemented` merely because the missing work is small.
+
+A node is only `implemented` when its promised scope is delivered end to end at
+the product level, not just partially present in backend code.
