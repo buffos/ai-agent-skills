@@ -1,250 +1,134 @@
 ---
 name: fog-of-war-planning
-description: Orchestrate `.okf` planning: map capability topology, clear fog, and route nodes into specification or delivery.
+description: Plan and evolve `.okf` capability maps for greenfield and brownfield repos.
 disable-model-invocation: true
 ---
 
 # Fog of War Planning
 
-Clear the fog before writing implementation specs.
+Use this as the public planning front door for `.okf` capability maps.
 
-This skill is the entrypoint for greenfield product planning when the repo should be mapped in `.okf/` before PRDs or issues are expanded.
+The user should be able to say things like:
 
-This skill depends on `$okf-planning-profile` for the canonical planning-node shape and `.okf` planning semantics.
+- what should we build?
+- clear fog on `<node>`
+- add `<feature>` to `<node>`
+- organize this area
 
-Before non-trivial work, read:
+This skill owns the planning map. It decides the internal route from node
+state and graph shape; the user should not have to remember downstream
+sub-skills.
+
+## Load first
+
+Read these before substantive work:
 
 - [REFERENCE.md](./REFERENCE.md)
 - [../okf-planning-profile/REFERENCE.md](../okf-planning-profile/REFERENCE.md)
 
-Also read [BROWNFIELD.md](./BROWNFIELD.md) when the repo already has meaningful
-code and the goal is to align the graph with implemented behavior.
+Read [BROWNFIELD.md](./BROWNFIELD.md) too when the repo already has meaningful
+code and the graph must align with implemented behavior.
 
-When writing or updating planning-map concepts, use [../okf-planning-profile/templates/project-planning-concept.md](../okf-planning-profile/templates/project-planning-concept.md) as the starting template.
-Use `$okf-planning-profile` whenever this workflow needs to create, update, split, link, or advance planning-map nodes.
+When writing or updating planning-map concepts:
+
+- use [../okf-planning-profile/templates/project-planning-concept.md](../okf-planning-profile/templates/project-planning-concept.md) as the starting template
+- use `$okf-planning-profile` as the authority for node shape, state, links,
+  and maintenance rules
 
 ## Workflow
 
-### 1. Inventory the territory
+### 1. Detect the planning map
 
-Check whether a planning graph already exists inside `.okf/`.
+Inspect `.okf/` and determine whether a planning graph already exists.
 
-Do not treat bare `.okf/` existence as sufficient. A repo may already use OKF
-for datasets, metrics, decisions, or playbooks without having any planning-map
-nodes yet.
+Do not treat bare `.okf/` existence as enough. Generic OKF bundles may already
+exist without any planning nodes.
 
-Treat the repo as having an existing planning graph only when you can find
-planning-profile evidence such as:
+If no planning graph exists:
 
-- a root project node for the planning map
-- capability or shared-concern nodes using the planning profile
-- planning fields such as `state`, `project`, `parent`, `children`, or
-  `shared_with`
+- ask what the user wants to build
+- do lightweight comparable-product research
+- propose the first root and top-level capabilities
+- confirm before writing the initial graph
 
-- If no planning graph exists yet, ask what the user wants to build at the
-  product level. Reuse the existing `.okf/` bundle if one is already present,
-  and add the planning graph into it rather than treating the repo as already
-  mapped.
-- If a planning graph does exist, inspect the root concept and current
-  top-level capabilities, then summarize the current map and start with an
-  explicit mode choice rather than assuming the next action.
+If a planning graph does exist:
 
-If a question can be answered from local repo context, inspect the repo instead of asking.
+- summarize the durable state
+- restate the active frontier
+- ask for an explicit mode instead of silently picking the next node
 
-### 2. Choose session mode on existing maps
+If the repo can answer a question, inspect it before asking the user.
 
-When a planning graph already exists, always ask which mode the user wants
-before doing substantive work.
+### 2. Choose the mode and frontier
 
-Offer grounded modes such as:
+On existing maps, always make the mode explicit before substantive work.
 
-- clear fog on an existing node
-- clear fog from code on an existing node
-- organize or reshape the map
-- tighten a bounded node
-- tighten a bounded node from code
-- add a new capability
-- hand off a bounded node to architecture spec work
-- verify implemented from code
+The available modes and their detailed rules live in
+[REFERENCE.md](./REFERENCE.md). In practice, this includes:
+
+- fog clearing
+- brownfield code-grounded refinement
+- topology organization
+- feature addition inside an existing node
+- bounded-node tightening
+- implementation verification
 - maintenance only
 
-Do not silently choose "the next foggy node".
+Then surface the frontier and have the user pick the node or area to work on.
 
-### 3. Select the frontier explicitly
+### 3. Run the chosen mode
 
-Before questioning or editing, show the current frontier so the user can choose
-where to work.
+Follow [REFERENCE.md](./REFERENCE.md) as the single source of truth for:
 
-Summarize:
+- mode discipline
+- state transitions
+- bounded-node decision points
+- feature-add routing
+- progress reporting
+- topology confirmation policy
 
-- current `foggy` nodes
-- current `bounded` nodes
-- recent nodes touched
-- candidate shared concerns, if any
+Important public contract:
 
-Then ask the user which node or area to work on in the chosen mode.
+- when the user says `add <feature> to <node>`, treat that as one planning
+  request
+- resolve whether it is an in-node extension, child capability, shared
+  capability, or spec refresh
+- choose the internal path yourself
+- explain the outcome in product terms, not sub-skill names
 
-### 4. Resume from durable state
+For brownfield work, separate:
 
-When resuming after interruption, compaction, or a later session, start by
-stating:
+- current implemented behavior
+- documented intended behavior
+- future target behavior
+- mismatches among them
 
-- the last confirmed topology
-- any unconfirmed ideas discovered in the prior session, if they exist
-- the current mode options
-- the current candidate frontiers
+### 4. Write only confirmed topology
 
-Persisted `.okf/` state is the baseline. It is not permission to skip
-questioning, confirmation, or mode selection.
+When the run produces a durable topology change, update `.okf/` using the
+planning profile template and maintenance rules.
 
-### 5. Research comparable structures
-
-Before proposing the first top-level map for a greenfield idea, do a lightweight comparable-product pass.
-
-Extract only:
-
-- recurring capability patterns
-- recurring information architecture patterns
-- recurring shared concerns
-
-Do not drift into pricing analysis, feature-by-feature market comparison, or implementation speculation.
-
-### 6. Propose the first map
-
-Model the product as one root project concept plus top-level capability concepts.
-
-The default unit is a capability, not a raw technical module. Technical concepts such as `search`, `ai`, or `db` should only be promoted when they are genuinely shared concerns.
-
-Before writing, confirm:
-
-- the root project concept
-- the proposed top-level capabilities
-- any promoted shared concepts
-
-### 7. Write the graph
-
-After confirmation, create or update `.okf/` using the orchestration rules in [REFERENCE.md](./REFERENCE.md) and `$okf-planning-profile` for node semantics and topology discipline.
-
-Default behavior:
-
-- create one root project concept
-- create one concept file per top-level capability
-- attach each capability to exactly one structural parent
-- add extra graph links for shared concerns
-- set new capabilities to `foggy` unless already clearly bounded
-
-### 8. Route by fog level
-
-Use the capability state to decide the next move:
-
-- `foggy` -> run `$grill-me` to decompose territory, clarify boundaries, or discover child capabilities
-- `bounded` -> route to the architecture suite, starting with `bounded-capability-spec-orchestrator`, to turn one bounded capability into exact reference artifacts
-- `specified` -> route to issue slicing, or to PRD refresh only when linked artifacts are stale or incomplete
-- `implemented` -> maintain the graph only if durable knowledge changed
-
-Do not create a PRD directly from `foggy` territory.
-
-After a node becomes `bounded`, do not leave the next step implicit. Explicitly
-offer one of these grounded paths for that node:
-
-- `tighten this bounded node with the architecture spec pipeline`
-- `hand off this bounded node to issue slicing if specs already exist`
-- `go back and refine this node's children instead`
-
-The skill should recommend one of the three rather than forcing the user to
-infer the next move alone.
-
-### 9. Enforce mode discipline
-
-In `clear fog` mode, the skill may:
-
-- ask questions
-- summarize what has become clearer
-- propose candidate child capabilities, boundaries, or shared concerns
-
-In `clear fog` mode, the skill must not:
-
-- write structural splits
-- promote shared concepts durably
-- rename or reorganize the map
-- advance state merely because an idea sounds plausible
-
-Those actions require explicit confirmation and, when topology changes, a shift
-into `organize or reshape the map` or equivalent confirmation to write.
-
-### 9a. Enforce brownfield code-grounding discipline
-
-For all brownfield modes, read [BROWNFIELD.md](./BROWNFIELD.md) and ground the
-node in implementation evidence before asking questions the code can already
-answer.
-
-Use:
-
-- `clear fog from code on an existing node` for brownfield `foggy -> bounded`
-- `tighten a bounded node from code` for brownfield `bounded -> specified`
-- `verify implemented from code` for brownfield `specified -> implemented`
-
-Distinguish current implementation, documented intent, target behavior, and
-mismatches. Do not let future design answers silently overwrite observed
-current behavior.
-
-### 10. Decide when a node can leave pure fog clearing
-
-Do not keep clearing fog forever just because more questions are possible.
-
-A node is clear enough to stop being the interrogation target when all of the
-following are true:
-
-- its purpose is understandable in one sentence
-- its boundary against siblings is understandable
-- its main child territories are visible, even if those children remain foggy
-- the main actors and inputs/outputs are known
-- the biggest ambiguity is now inside its children rather than in the parent
-
-At that point, the node can move out of pure fog-clearing focus even if the
-rest of the map still contains many `foggy` nodes.
-
-When this transition results in a `bounded` node, immediately explain whether
-the recommended next action is:
-
-- `bounded-capability-spec-orchestrator` on the bounded node
-- direct issue-slicing handoff if specs are already complete
-- more fog-clearing on one of its children
-
-Do not stop at reporting that the node became bounded.
-
-### 11. Report planning-state progress
-
-Whenever a node changes planning state, explicitly report:
-
-- which node changed
-- the old and new state
-- the current count of `foggy`, `bounded`, `specified`, and `implemented` nodes
-
-This progress report is required so the user can see that the map is becoming
-clearer even while parts of the graph remain unresolved.
-
-### 12. Promote shared concerns carefully
-
-Promote a repeated concern into its own shared concept when it appears in at least two capabilities and has distinct behavior, vocabulary, or policy worth reasoning about separately.
-
-Two mentions alone are not enough.
-
-### 13. Confirm topology changes before writing
-
-Always stop for confirmation before:
+Always confirm before:
 
 - creating the initial graph
 - adding top-level capabilities
-- splitting a capability into children
-- promoting a shared concept
+- splitting structural children
+- promoting shared concerns
 
-Later maintenance on already-confirmed nodes can be automatic when the topology is unchanged.
+### 5. Keep the map live
 
-### 14. Keep the graph live
+Treat:
 
-Treat `.okf/` as the map, `docs/architecture/` as the exact-spec layer, and `docs/agents/issues/` as the delivery layer.
+- `.okf/` as the planning map
+- `docs/architecture/` as the exact-spec layer
+- `docs/agents/issues/` as the delivery layer
 
-Capability concepts should link out to their PRD, issue files, and ADRs rather than duplicating those artifacts.
+When downstream work creates or changes durable artifacts, keep the owning
+capability node current.
 
-When downstream skills create durable artifacts, update the owning capability concept so the map stays current.
+Whenever a node changes planning state, report:
+
+- the node
+- old state
+- new state
+- current totals of `foggy`, `bounded`, `specified`, and `implemented`

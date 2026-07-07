@@ -44,11 +44,24 @@ Read the issue file from `docs/agents/issues/pending/`. If the file is not found
 
 Read the issue description and acceptance criteria.
 
+If the issue is a bug and contains an `Artifact sync required` section, treat
+that section as part of the required completion scope, not as optional notes.
+
+Determine whether the issue requires any of:
+
+- `.okf` owner updates
+- architecture artifact updates such as PRD, contract, use cases, scenarios, or glossary
+
+If those updates are marked as required, include them in the implementation
+plan and completion checks.
+
 Start implementation using the `/tdd` skill and `/solid-principles` skill (if applicable).
 
 **Progress tracking:**
 - When any acceptance criterion is met, mark it as checked (`[x]`) in the issue file.
 - When all criteria are met, run all tests and check for build and lint errors.
+- When an `Artifact sync required` section exists, do not treat the issue as
+  complete until the required `.okf` and architecture updates are also done.
 
 **Failure handling:**
 - If tests fail or the build breaks, attempt to fix obvious errors first.
@@ -69,6 +82,22 @@ If `.okf/` exists:
 - update the owning capability concept's `issues` references to point at the new done path
 - refresh any progress notes needed to reflect what changed
 - only mark the capability `implemented` if the node's scoped work is actually exhausted, not merely because one issue is done
+
+If the issue declared artifact-sync requirements:
+
+- verify the declared `.okf` owner update was made, if required
+- verify each declared architecture artifact update was made, if required
+- do not close the issue while those declared updates are still missing
+
+For bug issues:
+
+- a pure implementation bug may close with code and tests alone only when the
+  issue explicitly says no `.okf` or architecture sync is required
+- a spec-correction bug is not complete until the code change and the declared
+  architecture updates both exist
+- a topology/ownership bug should normally have been rerouted before
+  implementation; if one still reaches this skill, stop and repair ownership
+  through `fog-of-war-planning` before closing it
 
 Use `$okf-planning-profile` as the authority for what `implemented` means and how capability references should be maintained.
 

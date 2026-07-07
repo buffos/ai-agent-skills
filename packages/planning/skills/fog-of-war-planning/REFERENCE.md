@@ -43,6 +43,7 @@ Offer grounded paths such as:
 - clear fog on an existing node
 - clear fog from code on an existing node
 - organize or reshape the map
+- add or extend a feature in an existing node
 - tighten a `bounded` capability
 - tighten a `bounded` capability from code
 - add a new capability
@@ -116,6 +117,38 @@ Use this mode for confirmed topology work such as:
 - adding a new capability
 - promoting a shared concept
 - relinking, renaming, or restructuring nodes
+
+### `add or extend a feature in an existing node`
+
+Use this mode when the user already knows the owning node and wants to extend
+it without being forced to choose the internal workflow.
+
+Allowed actions:
+
+- resolve the target node
+- inspect the node's current planning state
+- decide whether the addition is an in-node extension, child capability, shared
+  capability, or spec refresh
+- route internally to the right next step
+
+Required behavior:
+
+- keep the user-facing interaction at the level of product intent rather than
+  sub-skill names
+- if the feature widens scope materially, propose the required topology change
+  before writing it
+- if the feature fits current scope, refresh the node and linked exact-spec
+  artifacts as needed
+- if the feature belongs outside the node, explain the new proposed placement
+  and ask for confirmation before writing topology
+
+State-sensitive expectations:
+
+- `foggy`: clarify where the feature belongs inside the territory
+- `bounded`: tighten the addition toward exact specification
+- `specified`: decide whether to refresh specs in place or reshape topology
+- `implemented`: treat as brownfield extension work and separate current
+  implementation from target addition
 
 ### `tighten a bounded capability`
 
@@ -208,6 +241,10 @@ This report is part of the workflow, not optional commentary.
 - `foggy` territory routes to `$grill-me`
 - `bounded` territory routes to the architecture suite, starting with `bounded-capability-spec-orchestrator`
 - `specified` territory routes to issue slicing, or to PRD refresh only when linked artifacts are stale or incomplete
+
+For the public mode `add or extend a feature in an existing node`, routing is
+chosen internally by the orchestrator from the node's state and the addition's
+scope shape. The user should not have to select the downstream workflow.
 
 The required path into specification is:
 

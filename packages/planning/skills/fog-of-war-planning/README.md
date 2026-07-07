@@ -85,6 +85,25 @@ Behavior:
 - relinks or reshapes topology
 - updates `.okf/` after confirmation
 
+### `add or extend a feature in an existing node`
+
+Use this when the user says things like:
+
+- add feature `X` to node `Y`
+- extend node `Y` with `X`
+- make `Y` support `X`
+
+Behavior:
+
+- resolves the target node
+- inspects the node's current state
+- decides whether the addition belongs inside the node, as a child capability,
+  as a shared capability, or as a spec refresh
+- routes the next step internally without forcing the user to know workflow
+  names
+
+This is the preferred public entry for feature additions on existing nodes.
+
 ### `tighten a bounded node`
 
 Use this when a node is bounded but still needs exact clarification before
@@ -237,3 +256,5 @@ the owning capability node rather than duplicating topology elsewhere.
 - Do not write topology in fog-clearing modes without confirmation.
 - Do not let future intended behavior silently overwrite observed current behavior in brownfield work.
 - Always report state totals when a node changes state.
+- Do not make the user remember internal sub-skills for ordinary feature
+  additions; feature-add routing belongs here.

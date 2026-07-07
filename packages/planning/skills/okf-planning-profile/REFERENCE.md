@@ -254,6 +254,7 @@ Recommended modes:
 - clear fog on an existing node
 - clear fog from code on an existing node
 - organize or reshape the map
+- add or extend a feature in an existing node
 - tighten a bounded node
 - tighten a bounded node from code
 - add a new capability
@@ -285,6 +286,19 @@ linked issues, and validation evidence to decide whether the node can move from
 
 If important completion or scope-exhaustion questions remain unresolved after
 code inspection, the node should remain `specified`.
+
+In `add or extend a feature in an existing node` mode, the orchestrator should
+hide internal workflow selection from the user and decide whether the addition
+belongs:
+
+- inside the node's current scope
+- as a new child capability
+- as a new shared capability
+- as a spec refresh on an already specified node
+
+The user's job is to name the desired feature and target node. The
+orchestrator's job is to choose the next internal path from the current graph
+state.
 
 ## Shared-concern promotion rule
 

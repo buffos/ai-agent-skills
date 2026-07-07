@@ -67,7 +67,46 @@ Also determine which **PRD sub-document** this bug relates to:
 
 If `.okf/` exists, also resolve the owning capability or shared concept when possible. Prefer the narrowest concept that actually owns the behavior. If the bug spans multiple capabilities, use the relevant shared concept or a cross-cutting node, following `$okf-planning-profile` graph semantics.
 
-### 5. Create the issue file
+### 5. Determine artifact-sync impact
+
+Before writing the issue, decide which kind of bug this is:
+
+- **Pure implementation bug**: intended behavior is already clear in existing specs or graph ownership
+- **Spec-correction bug**: the expected behavior is real, but current PRD, contract, use cases, scenarios, or glossary are wrong, stale, or incomplete
+- **Topology/ownership bug**: the bug reveals missing or wrong capability ownership, shared concern modeling, or graph structure
+- **New feature disguised as a bug**: the reported "expected behavior" is not actually established in current specs, graph ownership, or implemented product intent
+
+Use local evidence first:
+
+- linked capability node in `.okf/`
+- linked PRD and architecture artifacts
+- related issue history
+- current implementation and tests
+
+Then decide the required sync work:
+
+- **Pure implementation bug** -> create the bug issue and link it back to the owning concept
+- **Spec-correction bug** -> create the bug issue and also record which architecture artifacts must be updated so intended behavior, issue, and code can converge
+- **Topology/ownership bug** -> stop treating it as a standalone bug filing task and route through `fog-of-war-planning` first to repair ownership or graph shape, then return to issue filing if still needed
+- **New feature disguised as a bug** -> stop the bug workflow without creating a bug issue, explain that this is feature work rather than broken intended behavior, and route the user into planning/spec flow
+
+Do not leave the durable artifacts ambiguous. If the bug fix will change design truth, contract truth, or ownership truth, the issue should say so explicitly.
+
+Treat it as a new feature when the local evidence shows one or more of these:
+
+- the requested behavior is absent from the owning `.okf` node and linked architecture artifacts
+- the requested behavior would expand scope rather than restore intended scope
+- the requested behavior requires new capability decisions rather than correction of an already agreed rule
+
+If the report is really a new feature, terminate this skill and tell the user exactly what to do next:
+
+- if the owning capability is unclear or missing, use `fog-of-war-planning` to add or place the feature concept
+- if the owning capability already exists but the feature is not yet bounded or specified, use `fog-of-war-planning` on that node first
+- if the owning capability is already bounded and ready for exact spec work, use `bounded-capability-spec-orchestrator` or `write-a-prd`
+
+Do not create a bug issue for feature work.
+
+### 6. Create the issue file
 
 **Numbering:** Read the `# Current Max Issue ID` section at the bottom of `docs/agents/issues/issues.md`. The value there is the highest issue number ever assigned. The new issue number is `max + 1`. If the section or file does not exist, fall back to scanning `docs/agents/issues/pending/` and `docs/agents/issues/done/` for the highest existing number.
 
@@ -86,6 +125,12 @@ A clear description of the bug. Include steps to reproduce, expected vs actual b
 - [ ] [Any additional criteria from the grilling]
 - [ ] No regressions in related functionality
 
+## Artifact sync required
+
+- `.okf` owner update: [none | required, with target node/path]
+- Architecture artifact updates: [none | list exact files such as PRD, contract, use cases, scenarios, glossary]
+- Reason: [why the bug fix changes or does not change durable design/spec truth]
+
 ## Blocked by
 
 - `docs/agents/issues/pending/NNN-title.md` (if any)
@@ -97,7 +142,17 @@ Or "None — can start immediately" if no blockers.
 Reference by number from the parent PRD (if applicable), or "None — bug fix".
 </bug-issue-template>
 
-### 6. Update the issues registry
+When `.okf/` exists and the bug is a pure implementation bug or spec-correction bug:
+
+- append the created issue path to the owning concept node's `issues` references
+- if architecture artifact updates are required, mention the exact target files in the issue body
+
+If the bug exposed a topology/ownership problem, do not guess the graph write. Route through `fog-of-war-planning` first.
+
+If the report is actually a new feature, stop before issue creation and route
+the user into planning/spec work instead.
+
+### 7. Update the issues registry
 
 Append a new row to `docs/agents/issues/issues.md` (or create the file if it doesn't exist):
 
@@ -112,7 +167,7 @@ Append a new row to `docs/agents/issues/issues.md` (or create the file if it doe
 
 If `.okf/` exists, append the created bug issue path to the owning concept node's `issues` references after the issue file is created through `$okf-planning-profile`, using the planning profile contract for the node shape.
 
-### 7. Update the max issue ID
+### 8. Update the max issue ID
 
 After appending the new row to the registry, update the `# Current Max Issue ID` section at the bottom of `issues.md` to reflect the new issue number. This ensures future runs of `/prd-to-issues` or `/report-bug` will pick up where this one left off.
 
