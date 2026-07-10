@@ -1,0 +1,4 @@
+interface:
+  display_name: "KO New Math Doc"
+  short_description: "Bilingual LuaLaTeX math handouts"
+  default_prompt: "Use $ko-new-mathdoc to draft a bilingual LuaLaTeX math handout with the right exam or worksheet structure."
