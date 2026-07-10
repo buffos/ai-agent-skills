@@ -252,6 +252,15 @@ The required path into specification is:
 foggy -> bounded -> architecture-spec pipeline -> readiness review -> specified
 ```
 
+## Verification-policy initialization
+
+Before routing a `bounded` node into the architecture-spec pipeline or direct
+issue slicing, ensure the root project concept has the `verification` policy
+defined by `$okf-planning-profile`. If the planning map or root is missing,
+create it through `$okf` and `$okf-planning-profile`; if the policy is missing,
+ask the user to choose its mode and surface overrides, then persist it in root
+frontmatter. Do not create a separate policy file.
+
 ## Bounded-node decision point
 
 When a node becomes `bounded`, the orchestrator must explicitly guide the next
@@ -451,10 +460,11 @@ the same local issue conventions:
 `fog-of-war-planning` must not create pending issue files that bypass the local
 issue registry.
 
-### `process-issue`
+### `process-reference-issue`
 
-- Read the linked capability concept before implementation.
-- Write back issue references and progress after implementation.
+- Use this after architecture specification and reference-doc issue slicing.
+- Read the linked capability concept and architecture artifacts before implementation.
+- Apply the root verification policy and write back issue references and progress.
 - Only mark a node `implemented` when the node's scoped work is actually exhausted.
 
 ### `report-bug`

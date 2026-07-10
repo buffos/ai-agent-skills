@@ -23,6 +23,7 @@ durable changes, and preserve OKF-compatible frontmatter and linking patterns.
 - creating or splitting capability nodes
 - promoting a shared concern into its own concept
 - attaching or updating `artifact_root`, `discovery_notes`, `gap_analysis`, `orchestration_status`, `prd`, `glossary`, `domain_model`, `use_cases`, `contract`, `scenarios`, `readiness_review`, `issues`, `adrs`, `children`, and shared links
+- defining or updating the root project's `verification` policy
 - interpreting or changing planning states
 - maintaining planning-node consistency after downstream artifact changes
 
@@ -75,6 +76,9 @@ Populate:
 - required OKF frontmatter
 - planning-profile fields defined in [REFERENCE.md](./REFERENCE.md)
 - a short conceptual body focused on intent, scope, and relationships
+
+For the root `project` node, follow the `Verification policy` rules in
+[REFERENCE.md](./REFERENCE.md) before downstream specification or issue work.
 
 Do not copy PRD detail, acceptance criteria, or implementation notes into the node body.
 

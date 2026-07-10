@@ -171,6 +171,13 @@ Each issue file must include:
 - blocked by
 - artifact anchors
 - acceptance scenarios addressed
+- verification obligations mapped to the addressed stable scenario IDs
+
+For each relevant scenario, classify backend-boundary, frontend-integration,
+and end-to-end coverage as `planned`, `implemented`, `deferred`, or
+`not-applicable`. Read the root project concept's `verification` policy before
+deciding whether any item is a closure requirement. Do not invent a test
+harness merely to satisfy a `catalog-only` policy.
 
 For user-visible slices, the issue must also make the exposure obligation
 explicit in the `What to build` or acceptance criteria so the slice cannot be

@@ -57,6 +57,19 @@ Include only the anchors that exist and matter.
 If no acceptance-scenarios artifact exists yet, say:
 
 `Not yet defined`
+
+## Verification obligations
+
+- Policy source: `/.okf/<root-project-node>.md`
+
+| Scenario | Backend boundary | Frontend integration | End-to-end journey |
+|---|---|---|---|
+| `SC-001` | `planned` | `not-applicable` | `deferred: no E2E harness` |
+
+Use stable acceptance-scenario IDs when available. Every cell must be one of
+`planned`, `implemented: <test path or command>`, `deferred: <reason>`, or
+`not-applicable`. Apply the root project's verification policy when deciding
+whether an entry blocks issue closure.
 ```
 
 Keep the metadata aligned with the registry row. The `Owning capability node`,

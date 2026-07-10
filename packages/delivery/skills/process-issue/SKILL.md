@@ -9,6 +9,9 @@ Implement a specific issue or the next non-blocking issue if a number is not pro
 
 If `.okf/` exists, use `$okf-planning-profile` and read [../../../planning/skills/okf-planning-profile/REFERENCE.md](../../../planning/skills/okf-planning-profile/REFERENCE.md) before changing capability-node state or artifact references.
 
+`process-issue` owns the shared issue-execution lifecycle. Architecture-grounded
+work enters through `$process-reference-issue` first.
+
 ## Process
 
 ### 1. Load the issues registry
@@ -55,7 +58,8 @@ Determine whether the issue requires any of:
 If those updates are marked as required, include them in the implementation
 plan and completion checks.
 
-Start implementation using the `/tdd` skill and `/solid-principles` skill (if applicable).
+Use TDD and design practices when the issue or repository convention requires
+them; otherwise use proportionate internal tests and implementation practices.
 
 **Progress tracking:**
 - When any acceptance criterion is met, mark it as checked (`[x]`) in the issue file.

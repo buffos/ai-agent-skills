@@ -154,6 +154,31 @@ Issue files remain in `docs/agents/issues/pending/` and `docs/agents/issues/done
 Maintain directory `index.md` files and append durable bundle changes to
 `log.md` in the same spirit as the generic `$okf` skill.
 
+## Verification policy
+
+The root `project` concept owns one `verification` block. It is required before
+architecture specification or issue slicing and is inherited by all capability
+nodes:
+
+```yaml
+verification:
+  mode: catalog-only # catalog-only | when-supported | required
+  deferred_requires_reason: true
+  surfaces:
+    backend-boundary: when-supported
+    frontend-integration: when-supported
+    end-to-end: catalog-only
+```
+
+`catalog-only` records scenario-linked verification intent without blocking
+closure. `when-supported` requires applicable coverage only when its harness
+exists; otherwise record a deferral. `required` requires all applicable
+coverage. Surface values override `mode`; `not-applicable` remains valid where
+the product lacks that surface.
+
+When the block is absent, ask the user to choose a mode and surface overrides;
+do not silently select one or create a separate policy file.
+
 ## Capability concept profile
 
 Each capability concept should use normal OKF frontmatter plus these planning fields where applicable:

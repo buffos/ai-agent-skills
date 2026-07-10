@@ -230,7 +230,7 @@ It routes into or works alongside:
 - [`bounded-capability-spec-orchestrator`](../../../architecture/skills/bounded-capability-spec-orchestrator/) for bounded-node exact specification
 - [`write-a-prd`](../write-a-prd/) as a focused PRD helper
 - [`prd-to-issues`](../../../delivery/skills/prd-to-issues/) for issue slicing
-- [`process-issue`](../../../delivery/skills/process-issue/) for implementation
+- [`process-reference-issue`](../../../architecture/skills/process-reference-issue/) for architecture-grounded implementation
 - [`report-bug`](../../../delivery/skills/report-bug/) for bug ownership write-back
 
 ## Durable Outputs

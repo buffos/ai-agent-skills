@@ -199,12 +199,26 @@ Do not:
 
 Produce a scenario set that includes:
 
+- stable scenario ID (for example `SC-001`)
 - scenario title
 - short purpose or target behavior
 - precondition(s)
 - action
 - expected outcome
 - optional note on what rule or workflow branch it covers
+
+For each scenario, record the applicable verification surfaces without turning
+the canonical business behavior into transport-specific test steps:
+
+- backend boundary: an external API, CLI, webhook, or other ingress call can
+  initiate and observe the behavior
+- frontend integration: a frontend action initiates the expected backend call
+- end-to-end journey: a user can initiate the action and observe the result
+
+Use `not-applicable` where the product has no corresponding surface. Initial
+entries are verification intent, not an instruction to build a test harness;
+the root project's `verification` policy decides what later blocks issue
+closure.
 
 The output should be reusable later for:
 

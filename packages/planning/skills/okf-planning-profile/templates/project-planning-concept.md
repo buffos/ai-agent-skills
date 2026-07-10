@@ -27,6 +27,16 @@ timestamp: <ISO 8601, e.g. 2026-06-14T10:00:00Z>
 #   - docs/agents/issues/pending/123-example.md
 # adrs:
 #   - docs/agents/adr/0001-example.md
+# verification:
+#   # catalog-only records verification intent but never blocks issue closure.
+#   # Use when-supported to require tests only where the relevant harness exists,
+#   # or required to require every applicable listed test before closure.
+#   mode: <catalog-only | when-supported | required>
+#   deferred_requires_reason: true
+#   surfaces:
+#     backend-boundary: <catalog-only | when-supported | required>
+#     frontend-integration: <catalog-only | when-supported | required>
+#     end-to-end: <catalog-only | when-supported | required>
 ---
 
 # Intent

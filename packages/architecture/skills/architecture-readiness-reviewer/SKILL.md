@@ -117,6 +117,12 @@ Review whether the artifacts support:
 For user-visible features, also review whether the artifacts support tests that
 would fail if the behavior remained behind the product surface.
 
+When a root planning concept defines a `verification` policy, verify that
+acceptance scenarios have stable IDs and identify their applicable backend
+boundary, frontend-integration, and end-to-end surfaces. A missing automated
+test harness is not a readiness finding under `catalog-only`; missing
+observable behavior or an unclassifiable surface is.
+
 If a requirement or workflow cannot be tested from the existing docs, flag that gap.
 
 ### 8. Report Findings with Severity and References
