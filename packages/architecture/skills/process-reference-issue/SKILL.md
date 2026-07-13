@@ -26,6 +26,12 @@ to the generic lifecycle.
 4. If the artifact set has a material contradiction or gap, record it in the
    owning capability's `requirements-gap-analysis.md` and route back to the
    appropriate architecture authoring step. Do not invent product behavior.
+5. Read the issue's execution type and review gate. An `AFK` issue with a
+   `visual-review` or `product-approval` gate is still ready for agent
+   implementation; after automated acceptance checks pass, move it to
+   `awaiting-human-review` and pause until the user completes the gate. A
+   `HITL` issue requires human implementation or decision-making and should not
+   be treated as an ordinary AFK implementation task.
 
 ## Shared execution lifecycle
 

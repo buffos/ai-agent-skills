@@ -33,7 +33,14 @@ If you have not already explored the codebase, do so to understand the current s
 
 Break the PRD into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
 
-Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+Each slice has an execution type and an optional review gate. `HITL` means the
+implementation itself requires human interaction, such as an architectural
+decision, human-only access, or manual implementation. `AFK` means an agent
+can implement and test it directly. A separate review gate (`none`,
+`visual-review`, or `product-approval`) may require human inspection after an
+AFK implementation; such an issue remains agent-ready, then moves to
+`awaiting-human-review` before closure. Prefer AFK with an explicit review gate
+over HITL when possible.
 
 If the capability graph identifies shared concerns or adjacent capabilities, use that context to avoid generating issues that duplicate work already modeled elsewhere.
 
@@ -48,7 +55,8 @@ If the capability graph identifies shared concerns or adjacent capabilities, use
 Present the proposed breakdown as a numbered list. For each slice, show:
 
 - **Title**: short descriptive name
-- **Type**: HITL / AFK
+- **Execution type**: HITL / AFK
+- **Review gate**: none / visual-review / product-approval
 - **Blocked by**: which other slices (if any) must complete first
 - **User stories covered**: which user stories from the PRD this addresses
 
@@ -57,7 +65,7 @@ Ask the user:
 - Does the granularity feel right? (too coarse / too fine)
 - Are the dependency relationships correct?
 - Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
+- Are the execution types and review gates correct?
 
 Iterate until the user approves the breakdown.
 
@@ -133,11 +141,14 @@ If the file does not exist, create it with the header and all new rows.
   - `needs-info` — waiting on reporter for more information
   - `ready-for-agent` — fully specified, ready for an AFK agent
   - `ready-for-human` — needs human implementation
+  - `awaiting-human-review` — implementation and automated checks are complete; a declared human review gate remains before closure
   - `wontfix` — will not be actioned
 - **Blocked by**: Comma-separated issue numbers (e.g., `001, 003`) or `—` if none
 
 **State assignment rules:**
 - AFK issues that are fully specified → `ready-for-agent`
+- AFK issues with a review gate → `ready-for-agent`, then
+  `awaiting-human-review` after implementation and automated verification
 - HITL issues → `ready-for-human`
 - Issues with open questions or missing details → `needs-info`
 - New issues from external reporters → `needs-triage`

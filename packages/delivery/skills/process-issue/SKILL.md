@@ -25,7 +25,11 @@ If the file does not exist at that path, ask the user for the correct path.
 **If the user specified an issue number:**
 
 - Locate it in the issues table. If it does not exist, inform the user.
-- If the state is NOT `ready-for-agent`, inform the user of the current state and stop.
+- If the state is `awaiting-human-review`, ask the user to confirm that the
+  declared review gate has been completed; after explicit confirmation, resume
+  the closure checks without reimplementing the issue.
+- If the state is NOT `ready-for-agent` or `awaiting-human-review`, inform the
+  user of the current state and stop.
 - If it is blocked by other issues, inform the user which issues must be resolved first to unlock it. **Do not attempt implementation — blocked means blocked.**
 
 **If the user did NOT specify a number:**
@@ -75,6 +79,13 @@ them; otherwise use proportionate internal tests and implementation practices.
 ### 5. Update issues registry, pending folder, and graph
 
 After all acceptance criteria are met, tests pass, and the build is clean:
+
+- If the issue metadata declares a review gate other than `none`, keep the
+  issue in `pending/`, update its registry state to `awaiting-human-review`,
+  and report the exact visual or product review the user must perform. Do not
+  move it to `done` until the user explicitly confirms the gate.
+- If the issue has no review gate, continue directly with the closure steps
+  below.
 
 - Move the resolved issue file to `docs/agents/issues/done/` and prepend the filename with a date stamp: `YYYYMMDD-NNN-short-title.md` (e.g., `20260509-001-switch-sqlite-pure-go.md`).
 - Remove the resolved issue's row from `docs/agents/issues/issues.md`.

@@ -10,7 +10,13 @@ Use this local markdown template.
 - Artifact root: `docs/architecture/<capability-slug>/`
 - Issue file: `issues/pending/NNN-short-title.md`
 - Category: `feature`
+- Execution type: `AFK`
+- Review gate: `none`
 - Suggested state: `ready-for-agent`
+
+If a review gate is declared, the issue remains `ready-for-agent` while the
+agent implements it and moves to `awaiting-human-review` only after automated
+acceptance checks pass.
 
 ## Parent Artifacts
 
@@ -31,6 +37,12 @@ A concise description of the vertical slice. Describe the end-to-end behavior, n
 - [ ] Criterion 1
 - [ ] Criterion 2
 - [ ] Criterion 3
+
+## Human review gate
+
+Use `None` when the review gate is `none`. For `visual-review` or
+`product-approval`, state exactly what the user must inspect or approve before
+the issue can move from `awaiting-human-review` to `done`.
 
 ## Blocked by
 

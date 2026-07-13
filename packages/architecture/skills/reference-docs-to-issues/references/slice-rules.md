@@ -29,13 +29,23 @@ Prefer:
 - feature slices after their blockers
 - acceptance coverage that can be demonstrated incrementally
 
-## HITL vs AFK
+## Execution type and review gate
 
-Mark as `HITL` if the slice requires:
+Mark execution type `HITL` only if implementation itself requires:
 
-- product-owner clarification
-- human architectural decision
-- human design review
-- non-automatable business approval
+- product-owner clarification before implementation can proceed
+- a human architectural or product decision
+- human-only access or manual implementation
 
-Mark as `AFK` if an agent can implement it directly once the issue is written clearly enough.
+Mark execution type `AFK` if an agent can implement and test it directly once
+the issue is written clearly enough.
+
+Use a separate review gate when the implementation is AFK but closure requires
+human inspection or approval:
+
+- `visual-review` for visual/UX inspection after implementation
+- `product-approval` for explicit product acceptance after implementation
+
+An AFK issue with a review gate remains agent-ready for implementation and
+transitions to `awaiting-human-review` after its automated acceptance checks
+pass.

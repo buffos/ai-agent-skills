@@ -75,12 +75,25 @@ Rules:
 - for user-visible behavior, do not accept a slice that leaves the behavior
   behind the product surface
 
-Possible slice types:
+Execution types:
 
-- `AFK`: can be implemented and merged without human interaction
-- `HITL`: requires human input, decision, review, or approval
+- `AFK`: an agent can implement and test the issue directly from the written
+  specification. An AFK issue may still require a post-implementation review
+  gate before closure.
+- `HITL`: implementation itself requires human input, a product decision,
+  human-only access, or human implementation. Do not use HITL merely because
+  a completed UI needs visual inspection.
 
-Prefer `AFK` over `HITL` where possible.
+Review gates are separate metadata:
+
+- `none`: no additional human gate beyond normal acceptance verification.
+- `visual-review`: the agent implements and tests the feature, then pauses for
+  the user to inspect the visual/UX result before closure.
+- `product-approval`: the user must approve a product behavior or decision
+  after implementation before closure.
+
+Prefer `AFK` with an explicit review gate over `HITL` when the agent can perform
+the implementation autonomously.
 
 ### 4. Ground the Slices in the Artifact Set
 
@@ -106,7 +119,8 @@ Before writing files, present the proposed breakdown as a numbered list.
 For each slice, show:
 
 - **Title**
-- **Type**: `AFK` or `HITL`
+- **Execution type**: `AFK` or `HITL`
+- **Review gate**: `none`, `visual-review`, or `product-approval`
 - **Blocked by**
 - **Artifacts covered**
 - **Acceptance scenarios covered** when available
@@ -118,7 +132,7 @@ Ask the user:
 - Is the granularity right?
 - Are the dependency relationships correct?
 - Should any slices be split or merged?
-- Are the right slices marked `AFK` and `HITL`?
+- Are the execution types and review gates correct?
 
 Iterate until the user approves the breakdown.
 

@@ -35,6 +35,7 @@ Architecture-scoped issue registries should retain explicit references to:
   - `needs-info`
   - `ready-for-agent`
   - `ready-for-human`
+  - `awaiting-human-review`
   - `done`
   - `wontfix`
 - **Blocked by**: comma-separated issue numbers or `—`
@@ -42,6 +43,8 @@ Architecture-scoped issue registries should retain explicit references to:
 ## State Assignment
 
 - fully specified `AFK` issues -> `ready-for-agent`
+- fully specified `AFK` issues with a review gate -> `ready-for-agent`, then
+  `awaiting-human-review` after implementation and automated verification
 - `HITL` issues -> `ready-for-human`
 - issues with unresolved details -> `needs-info`
 - externally reported unclear work -> `needs-triage`
