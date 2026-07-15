@@ -10,6 +10,8 @@ Curated skill packages for Codex-style agents.
 - `packages/delivery` - issue setup, slicing, triage, and implementation workflow skills
 - `packages/productivity` - personal workflow and skill-authoring helpers
 - `packages/learning` - research, diagramming, and teaching skills
+- `packages/math` - LuaLaTeX high-school math handout skills
+- `packages/media` - text-to-image and text-to-speech generation skills
 - `packages/personas` - reviewer and debugger personas
 
 ## Experimental

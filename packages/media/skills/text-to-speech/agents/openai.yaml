@@ -1,0 +1,4 @@
+interface:
+  display_name: "Text to Speech"
+  short_description: "Create and generate Gemini TTS audio from text."
+  default_prompt: "Create directed Gemini TTS jobs from this text, then generate the audio files under tmp/media."

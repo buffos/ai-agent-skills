@@ -1,0 +1,10 @@
+{
+  "name": "math",
+  "version": "1.0.0",
+  "description": "Curated collection of agent skills for creating high-school mathematics handouts.",
+  "author": {
+    "name": "buffos"
+  },
+  "repository": "https://github.com/buffos/ai-agent-skills",
+  "license": "Apache 2.0"
+}

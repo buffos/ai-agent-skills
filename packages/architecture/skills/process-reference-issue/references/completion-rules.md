@@ -35,3 +35,5 @@ Do not close the issue if:
 - build fails
 - lint/static checks fail in relevant scope
 - acceptance criteria remain incomplete
+- an addressed canonical rule or acceptance scenario has no executed
+  verification artifact and no verification-policy-permitted deferred owner

@@ -23,10 +23,16 @@ to the generic lifecycle.
    route to `$fog-of-war-planning` to initialize it. Ensure every addressed
    scenario has verification obligations using only `planned`, `implemented`,
    `deferred`, or `not-applicable` values.
-4. If the artifact set has a material contradiction or gap, record it in the
+4. Read [references/scenario-traceability.md](references/scenario-traceability.md)
+   and build a working trace for every canonical rule or use case the issue
+   changes: `source rule -> acceptance scenario -> issue criterion -> planned
+   verification`. A source rule without a scenario is a material gap unless it
+   has an explicit deferred owner. Do not silently rely on an issue's shorter
+   acceptance-criteria summary when the canonical artifacts add behavior.
+5. If the artifact set has a material contradiction or gap, record it in the
    owning capability's `requirements-gap-analysis.md` and route back to the
    appropriate architecture authoring step. Do not invent product behavior.
-5. Read the issue's execution type and review gate. An `AFK` issue with a
+6. Read the issue's execution type and review gate. An `AFK` issue with a
    `visual-review` or `product-approval` gate is still ready for agent
    implementation; after automated acceptance checks pass, move it to
    `awaiting-human-review` and pause until the user completes the gate. A
@@ -48,6 +54,10 @@ Before closure, apply the root verification policy:
 - `required` requires every applicable obligation to be implemented.
 
 `not-applicable` is valid for a product without the corresponding surface.
+
+Before closing, complete the scenario traceability check: every addressed
+canonical rule and acceptance scenario must point to an executed verification
+artifact, or to a named deferred owner that the verification policy permits.
 
 ## Boundary
 

@@ -13,6 +13,9 @@ Review the scenario set against this checklist.
 - Is there more than a happy path?
 - Are failure, approval, or exception paths included where relevant?
 - Are read/report scenarios included when product value depends on them?
+- For lifecycle, timed, concurrent, or multi-item behavior: was every relevant
+  interaction in `stateful-scenario-matrix.md` represented by a scenario, an
+  explicit `not-applicable`/deferred decision, or a recorded requirements gap?
 
 ## Neutrality Quality
 

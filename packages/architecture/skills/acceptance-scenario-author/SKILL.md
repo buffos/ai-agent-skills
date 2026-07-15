@@ -53,6 +53,13 @@ Prioritize behaviors that:
 
 Use [references/scenario-selection.md](references/scenario-selection.md).
 
+When the capability has lifecycle states, more than one trigger source, time-
+based behavior, independent work items, or concurrent mutation, read
+[references/stateful-scenario-matrix.md](references/stateful-scenario-matrix.md).
+Record a coverage decision for every relevant interaction: a canonical
+scenario, an explicit `not-applicable`/deferred decision, or a requirements
+gap. Do not silently omit an interaction.
+
 ### 3. Balance Happy and Unhappy Paths
 
 A strong scenario set should include:
@@ -62,6 +69,7 @@ A strong scenario set should include:
 - invalid or rejected path
 - shortage or failure path
 - reversal or compensation path
+- independent-work failure isolation, when multiple items can be processed
 - extensibility or policy variation path, where relevant
 
 If the scenario set only proves the happy path, it is weak.
@@ -245,4 +253,5 @@ Read only what you need:
 - [references/scenario-selection.md](references/scenario-selection.md): how to choose which behaviors deserve canonical scenarios
 - [references/scenario-structure.md](references/scenario-structure.md): how to write stable behavioral scenarios
 - [references/scenario-coverage.md](references/scenario-coverage.md): coverage dimensions to include
+- [references/stateful-scenario-matrix.md](references/stateful-scenario-matrix.md): required interaction coverage for lifecycle, timed, or concurrent behavior
 - [references/scenario-quality-gate.md](references/scenario-quality-gate.md): review checklist before finalizing

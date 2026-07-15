@@ -3,14 +3,14 @@ type: Skill Package
 title: Architecture Package
 description: Curated collection of agent skills for reference-document architecture design, review, and issue-driven implementation planning.
 tags: ["package", "skills", "architecture"]
-timestamp: 2026-07-03T15:25:58Z
+timestamp: 2026-07-15T00:00:00Z
 repo_path: packages/architecture
 skill_count: 12
 ---
 
 # Overview
 
-This package groups related skills under `packages/architecture/`.
+This package groups related skills under `packages/architecture/`. Its acceptance-scenario workflow includes explicit coverage decisions for stateful, timed, concurrent, and multi-item behavior, and its reference-issue workflow traces canonical rules through executed verification evidence.
 It is one installable/documentable unit in the repository package layout.
 
 # Source Assets

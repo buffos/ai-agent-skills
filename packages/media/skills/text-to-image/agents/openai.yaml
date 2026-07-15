@@ -1,0 +1,4 @@
+interface:
+  display_name: "Text to Image"
+  short_description: "Create image prompts and generate images from text."
+  default_prompt: "Turn this text into a precise image-generation prompt and a runnable image-jobs.json entry."

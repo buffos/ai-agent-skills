@@ -1,12 +1,12 @@
 ---
 type: Repository
 title: AI Agent Skills Repository
-description: Repository of packaged agent skills organized under packages/ with architecture, planning, delivery, code-quality, learning, personas, productivity, and Angular bundles.
+description: Repository of packaged agent skills organized under packages/ with architecture, planning, delivery, code-quality, learning, math, media, personas, productivity, and Angular bundles.
 tags: ["repo", "skills", "packages", "okf"]
-timestamp: 2026-07-03T15:25:58Z
+timestamp: 2026-07-15T00:00:00Z
 repo_path: .
-package_count: 8
-skill_count: 56
+package_count: 10
+skill_count: 59
 ---
 
 # Overview
@@ -21,6 +21,8 @@ The main durable structure is the package catalog plus the skill inventory insid
 - [Code Quality Package](/packages/code-quality.md)
 - [Delivery Package](/packages/delivery.md)
 - [Learning Package](/packages/learning.md)
+- [Math Package](/packages/math.md)
+- [Media Package](/packages/media.md)
 - [Personas Package](/packages/personas.md)
 - [Planning Package](/packages/planning.md)
 - [Productivity Package](/packages/productivity.md)
@@ -32,6 +34,8 @@ The main durable structure is the package catalog plus the skill inventory insid
 - [Code Quality Skills](/skills/code-quality/index.md)
 - [Delivery Skills](/skills/delivery/index.md)
 - [Learning Skills](/skills/learning/index.md)
+- [Math Skills](/skills/math/index.md)
+- [Media Skills](/skills/media/index.md)
 - [Personas Skills](/skills/personas/index.md)
 - [Planning Skills](/skills/planning/index.md)
 - [Productivity Skills](/skills/productivity/index.md)
