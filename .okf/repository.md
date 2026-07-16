@@ -3,10 +3,10 @@ type: Repository
 title: AI Agent Skills Repository
 description: Repository of packaged agent skills organized under packages/ with architecture, planning, delivery, code-quality, learning, math, media, personas, productivity, and Angular bundles.
 tags: ["repo", "skills", "packages", "okf"]
-timestamp: 2026-07-15T00:00:00Z
+timestamp: 2026-07-16T00:00:00Z
 repo_path: .
 package_count: 10
-skill_count: 59
+skill_count: 60
 ---
 
 # Overview

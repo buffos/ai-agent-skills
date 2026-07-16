@@ -49,7 +49,8 @@ Use the suite in roughly this order when a capability is already `bounded`:
   `acceptance-scenario-author` create the durable reference set.
 - `architecture-readiness-reviewer` is the gate before implementation.
 - `reference-docs-to-issues` and `process-reference-issue` bridge from docs to
-  code.
+  code; verified reference issues hand off to delivery's `issue-closeout` for
+  common archive, registry, blocker, artifact, and OKF bookkeeping.
 
 ## Relationship To Fog Of War
 

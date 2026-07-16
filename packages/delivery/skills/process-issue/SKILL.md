@@ -76,45 +76,22 @@ them; otherwise use proportionate internal tests and implementation practices.
 - If fixes don't resolve the problem, add the unresolved items as new acceptance criteria (e.g., `- [ ] All tests pass`, `- [ ] Build completes without errors`) and continue working on them.
 - Do NOT leave the issue in a broken state. Stay with it until all criteria — including any newly added ones — are green.
 
-### 5. Update issues registry, pending folder, and graph
+### 5. Route verified work through shared closeout
 
 After all acceptance criteria are met, tests pass, and the build is clean:
 
 - If the issue metadata declares a review gate other than `none`, keep the
   issue in `pending/`, update its registry state to `awaiting-human-review`,
   and report the exact visual or product review the user must perform. Do not
-  move it to `done` until the user explicitly confirms the gate.
-- If the issue has no review gate, continue directly with the closure steps
-  below.
+  invoke `$issue-closeout` until the user explicitly confirms the gate.
+- If the issue has no review gate, or the user has explicitly approved its
+  pending gate, invoke `$issue-closeout` with the resolved issue file, registry
+  row, ownership context, acceptance evidence, and artifact-sync requirements.
 
-- Move the resolved issue file to `docs/agents/issues/done/` and prepend the filename with a date stamp: `YYYYMMDD-NNN-short-title.md` (e.g., `20260509-001-switch-sqlite-pure-go.md`).
-- Remove the resolved issue's row from `docs/agents/issues/issues.md`.
-- Remove the resolved issue number from the `Blocked by` column of any other issue in the table (since it is no longer blocking them).
-- If the issue had user stories associated with it, find the correct PRD file to update by reading the **PRD** column from the issue's row in the registry. The PRD column contains the sub-PRD filename (e.g., `prd-feeds.md`, `prd-email.md`, `prd-youtube.md`) or `prd.md` for cross-cutting issues. Open the corresponding file at `docs/agents/issues/<prd-filename>` and mark the referenced user stories as done. For example: `17. As a user, I want to rename...` becomes `17. [done] As a user, I want to rename...`
-
-If `.okf/` exists:
-
-- update the owning capability concept's `issues` references to point at the new done path
-- refresh any progress notes needed to reflect what changed
-- only mark the capability `implemented` if the node's scoped work is actually exhausted, not merely because one issue is done
-
-If the issue declared artifact-sync requirements:
-
-- verify the declared `.okf` owner update was made, if required
-- verify each declared architecture artifact update was made, if required
-- do not close the issue while those declared updates are still missing
-
-For bug issues:
-
-- a pure implementation bug may close with code and tests alone only when the
-  issue explicitly says no `.okf` or architecture sync is required
-- a spec-correction bug is not complete until the code change and the declared
-  architecture updates both exist
-- a topology/ownership bug should normally have been rerouted before
-  implementation; if one still reaches this skill, stop and repair ownership
-  through `fog-of-war-planning` before closing it
-
-Use `$okf-planning-profile` as the authority for what `implemented` means and how capability references should be maintained.
+`$issue-closeout` exclusively owns moving completed files, removing active
+registry rows, clearing blockers, synchronizing PRD/architecture/OKF records,
+and validating the closeout. Do not duplicate or partially perform those
+steps here.
 
 ### 6. Report to the user
 

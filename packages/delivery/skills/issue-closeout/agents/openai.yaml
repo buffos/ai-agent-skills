@@ -1,0 +1,4 @@
+interface:
+  display_name: "Issue Closeout"
+  short_description: "Close a verified local issue safely"
+  default_prompt: "Use $issue-closeout to archive a verified issue and synchronize its delivery and OKF records."

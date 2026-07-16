@@ -42,8 +42,10 @@ to the generic lifecycle.
 ## Shared execution lifecycle
 
 After those checks, follow `$process-issue` for implementation, blocker
-handling, acceptance-checkbox updates, verification, issue closure, registry
-maintenance, and OKF progress updates.
+handling, acceptance-checkbox updates, and verification. Once the reference
+trace and applicable review gate permit closure, invoke `$issue-closeout` for
+the shared archive, registry, blocker, artifact, and OKF bookkeeping. Do not
+duplicate closeout steps in this architecture entry point.
 
 Before closure, apply the root verification policy:
 

@@ -1,16 +1,16 @@
 ---
 type: Skill Package
 title: Delivery Package
-description: Curated collection of agent skills for issue setup, PRD slicing, triage, and issue-driven delivery workflows.
+description: Curated collection of agent skills for issue setup, PRD slicing, triage, issue implementation, and validated closeout workflows.
 tags: ["package", "skills", "delivery"]
-timestamp: 2026-07-03T15:25:58Z
+timestamp: 2026-07-16T00:00:00Z
 repo_path: packages/delivery
-skill_count: 5
+skill_count: 6
 ---
 
 # Overview
 
-This package groups related skills under `packages/delivery/`.
+This package groups related skills under `packages/delivery/`. `issue-closeout` centralizes the verified completion bookkeeping shared by issue processors.
 It is one installable/documentable unit in the repository package layout.
 
 # Source Assets
@@ -24,6 +24,7 @@ It is one installable/documentable unit in the repository package layout.
 # Skills
 
 - [prd-to-issues](/skills/delivery/prd-to-issues.md)
+- [issue-closeout](/skills/delivery/issue-closeout.md)
 - [process-issue](/skills/delivery/process-issue.md)
 - [repo-buffos-setup](/skills/delivery/repo-buffos-setup.md)
 - [report-bug](/skills/delivery/report-bug.md)

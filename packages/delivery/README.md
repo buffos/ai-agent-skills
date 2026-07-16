@@ -8,5 +8,6 @@ processing issues, reporting bugs, and triaging work.
 - `repo-buffos-setup`
 - `prd-to-issues`
 - `process-issue`
+- `issue-closeout`
 - `report-bug`
 - `triage`
