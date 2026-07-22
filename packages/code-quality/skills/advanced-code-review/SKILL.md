@@ -8,6 +8,7 @@ description: Run a strict pre-commit or pre-submit review over a diff, branch, w
 Strict pre-commit review.
 
 Read [REFERENCE.md](./REFERENCE.md). Read [FOWLER_REFACTORING.md](./FOWLER_REFACTORING.md) when checking smells and refactoring options. Read [SOLID_REVIEW.md](./SOLID_REVIEW.md) when reviewing classes, services, handlers, or module boundaries.
+Read [ARCHITECTURE_DELTA.md](./ARCHITECTURE_DELTA.md) and [ARCHITECTURE_DEBT.md](./ARCHITECTURE_DEBT.md) when the diff changes a service, handler, controller, facade, store, adapter, router, state coordinator, public interface, dependency wiring, or an application-boundary test double.
 
 ## Inputs
 
@@ -44,6 +45,10 @@ If the target is unspecified, ask for it.
    - Fowler smells worth fixing now
    Done when every material finding has severity, evidence, impact, and a fix direction.
 
+3a. Assess the architecture delta when triggered.
+   Inspect the changed boundary and its immediate callers, dependencies, composition root, and tests. State whether the diff deepens, is neutral to, or widens the boundary. Apply the escalation and debt-handoff rules.
+   Done when the architecture verdict and every required debt handoff are reported.
+
 4. Run repo-wide gates.
    Derive commands from CI, package scripts, task runners, Makefiles, or contributor docs.
    Minimum gates:
@@ -55,6 +60,8 @@ If the target is unspecified, ask for it.
 5. Decide commit readiness.
    `ready to commit` only if:
    - no unresolved `P0` to `P2` findings
+   - no untracked `P2` architecture regression
+   - architecture-delta review is complete when triggered
    - intended issue or spec is identified, or the user explicitly accepts that none exists
    - enough evidence shows the problem is solved
    - repo-wide tests pass

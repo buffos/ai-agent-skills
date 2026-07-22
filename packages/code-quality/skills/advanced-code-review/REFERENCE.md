@@ -64,6 +64,13 @@ Missing answers are findings.
 - implementation-mirroring tests
 - missing integration coverage at changed boundaries
 
+### Architecture delta
+
+When the trigger in `SKILL.md` applies, use `ARCHITECTURE_DELTA.md` for the
+one-hop boundary inspection and `ARCHITECTURE_DEBT.md` for escalation. Report
+the architecture verdict separately from SOLID findings and from the general
+commit verdict.
+
 ### Repo-wide gates
 
 Find the authoritative commands from:
@@ -99,11 +106,16 @@ Each blocking finding should state:
 - impact
 - shortest credible fix direction
 
+Architecture findings additionally identify the owning capability or the
+closest available delivery area, so debt is not left as an unowned note.
+
 ## Commit gate
 
 `ready to commit` only when all are true:
 
 - no unresolved `P0` to `P2`
+- no untracked `P2` architecture regression
+- architecture-delta review is complete when triggered
 - intended issue or spec identified, or user accepts none exists
 - enough evidence shows the problem is solved
 - repo-wide tests pass

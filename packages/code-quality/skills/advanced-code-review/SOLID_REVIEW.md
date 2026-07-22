@@ -64,6 +64,26 @@ Fix directions:
 - introduce a small boundary contract
 - move framework wiring to the composition root
 
+## Boundary depth
+
+SOLID compliance is not sufficient by itself. Prefer a cohesive deep module
+with a small interface over many shallow abstractions.
+
+Before recommending a split, show that the responsibilities change
+independently, have distinct clients or dependencies, and can be tested more
+durably at the proposed boundary.
+
+Before accepting an interface, check that:
+
+- its clients use the surface they depend on;
+- it hides meaningful workflow or infrastructure complexity;
+- it does not exist only to make mocking easier; and
+- it removes a real seam rather than merely moving coupling.
+
+Use `ARCHITECTURE_DELTA.md` when the current diff changes a boundary. It
+decides whether a local SOLID observation is an architecture regression that
+must block the change.
+
 ## Block only when the violation:
 
 - makes the current change brittle
