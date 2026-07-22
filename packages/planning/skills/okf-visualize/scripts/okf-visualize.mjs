@@ -10,9 +10,10 @@ import { fileURLToPath } from "node:url";
 const RESERVED = new Set(["index.md", "log.md"]);
 const FENCE = /^(```|~~~)/;
 const LINK = /(?<!\!)\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-const LAYOUTS = new Set(["force", "radial", "grid"]);
+const LAYOUTS = new Set(["force", "fcose", "radial", "grid"]);
 const LAYOUT_ALIASES = {
   force: "cose",
+  fcose: "fcose",
   radial: "concentric",
   grid: "grid",
 };
@@ -286,8 +287,11 @@ async function renderHtml({ title, sourceLink, layout, nodes, edges, bundleName 
     initialLayout: LAYOUT_ALIASES[layout] ?? "cose",
   });
   const vendorDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "vendor");
-  const [cytoscapeSource, markedSource] = await Promise.all([
+  const [cytoscapeSource, layoutBaseSource, coseBaseSource, fcoseSource, markedSource] = await Promise.all([
     fs.readFile(path.join(vendorDir, "cytoscape.min.js"), "utf8"),
+    fs.readFile(path.join(vendorDir, "layout-base.js"), "utf8"),
+    fs.readFile(path.join(vendorDir, "cose-base.js"), "utf8"),
+    fs.readFile(path.join(vendorDir, "cytoscape-fcose.js"), "utf8"),
     fs.readFile(path.join(vendorDir, "marked.min.js"), "utf8"),
   ]);
   return `<!doctype html>
@@ -308,6 +312,8 @@ h1{font:600 18px/1.2 Arial,sans-serif;margin:0 0 4px}
 #bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:8px;flex-wrap:wrap;max-width:min(92vw,840px)}
 #bar input,#bar select{appearance:none;border:1px solid var(--line);background:rgba(255,253,247,.95);color:var(--ink);padding:8px 10px;border-radius:999px;font:13px/1.2 Arial,sans-serif}
 #search{width:min(300px,32vw)}
+#force-controls{display:flex;gap:8px;flex-wrap:wrap}#force-controls[hidden]{display:none}.force-control{display:flex;align-items:center;gap:5px;padding:4px 6px 4px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,253,247,.95);color:var(--muted);font:11px/1 Arial,sans-serif}.force-control input{width:70px;padding:4px 6px!important;text-align:right}
+#fcose-controls{display:flex;gap:8px;flex-wrap:wrap}#fcose-controls[hidden]{display:none}.force-control input[type="checkbox"]{appearance:auto!important;width:auto!important;padding:0!important}
 #legend{position:absolute;bottom:14px;left:18px;z-index:5;display:flex;flex-wrap:wrap;gap:8px;max-width:65vw}
 .chip{display:flex;align-items:center;gap:6px;background:rgba(255,253,247,.92);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font:12px/1 Arial,sans-serif;color:var(--muted);cursor:pointer;user-select:none}
 .chip.off{opacity:.45}.dot{width:10px;height:10px;border-radius:50%}
@@ -340,15 +346,33 @@ h2{font:600 24px/1.2 Georgia,"Times New Roman",serif;margin:0 0 8px}
   <input id="search" placeholder="search concepts">
   <select id="type"><option value="">all types</option></select>
   <select id="layout">
-    <option value="cose">force</option>
+    <option value="cose">force (CoSE)</option>
+    <option value="fcose">force (fCoSE)</option>
     <option value="concentric">radial</option>
     <option value="breadthfirst">breadth-first</option>
     <option value="circle">circle</option>
     <option value="grid">grid</option>
   </select>
+  <div id="force-controls" aria-label="Force layout settings">
+    <label class="force-control">repulsion <input id="force-repulsion" type="number" min="0" step="500" value="9000"></label>
+    <label class="force-control">edge length <input id="force-edge-length" type="number" min="0" step="10" value="90"></label>
+    <label class="force-control">padding <input id="force-padding" type="number" min="0" step="5" value="40"></label>
+  </div>
+  <div id="fcose-controls" aria-label="fCoSE layout settings">
+    <label class="force-control">quality <select id="fcose-quality"><option value="default">default</option><option value="proof">proof</option></select></label>
+    <label class="force-control">separation <input id="fcose-separation" type="number" min="0" step="10" value="100"></label>
+    <label class="force-control">repulsion <input id="fcose-repulsion" type="number" min="0" step="500" value="4500"></label>
+    <label class="force-control">edge length <input id="fcose-edge-length" type="number" min="0" step="10" value="100"></label>
+    <label class="force-control">gravity <input id="fcose-gravity" type="number" min="0" step="0.05" value="0.25"></label>
+    <label class="force-control">padding <input id="fcose-padding" type="number" min="0" step="5" value="40"></label>
+    <label class="force-control">label dimensions <input id="fcose-label-dimensions" type="checkbox" disabled title="Available in proof quality"></label>
+  </div>
 </div>
 <div id="legend"></div>
 <script>${inlineScript(cytoscapeSource)}</script>
+<script>${inlineScript(layoutBaseSource)}</script>
+<script>${inlineScript(coseBaseSource)}</script>
+<script>${inlineScript(fcoseSource)}</script>
 <script>${inlineScript(markedSource)}</script>
 <script>
 const DATA=${payload};
@@ -358,9 +382,33 @@ const headerSummary=document.getElementById("header-summary");
 const search=document.getElementById("search");
 const typeSelect=document.getElementById("type");
 const layoutSelect=document.getElementById("layout");
+const forceControls=document.getElementById("force-controls");
+const forceRepulsion=document.getElementById("force-repulsion");
+const forceEdgeLength=document.getElementById("force-edge-length");
+const forcePadding=document.getElementById("force-padding");
+const fcoseControls=document.getElementById("fcose-controls");
+const fcoseQuality=document.getElementById("fcose-quality");
+const fcoseSeparation=document.getElementById("fcose-separation");
+const fcoseRepulsion=document.getElementById("fcose-repulsion");
+const fcoseEdgeLength=document.getElementById("fcose-edge-length");
+const fcoseGravity=document.getElementById("fcose-gravity");
+const fcosePadding=document.getElementById("fcose-padding");
+const fcoseLabelDimensions=document.getElementById("fcose-label-dimensions");
 const legend=document.getElementById("legend");
 const PALETTE=["#0d6b78","#9c4f2f","#4f772d","#4c5c96","#b7791f","#8a365f","#2f7f6d","#7c5e10","#6b4bb8","#6f4e37"];
 layoutSelect.value=DATA.initialLayout;
+const forceValue=(input,fallback)=>Number.isFinite(Number(input.value))&&Number(input.value)>=0?Number(input.value):fallback;
+const forceLayoutOptions=(animate)=>({name:"cose",animate,nodeRepulsion:forceValue(forceRepulsion,9000),idealEdgeLength:forceValue(forceEdgeLength,90),padding:forceValue(forcePadding,40)});
+const fcoseLayoutOptions=(animate)=>({name:"fcose",animate,quality:fcoseQuality.value,randomize:fcoseQuality.value!=="proof",fit:true,padding:forceValue(fcosePadding,40),nodeSeparation:forceValue(fcoseSeparation,100),nodeRepulsion:forceValue(fcoseRepulsion,4500),idealEdgeLength:forceValue(fcoseEdgeLength,100),gravity:forceValue(fcoseGravity,.25),nodeDimensionsIncludeLabels:fcoseQuality.value==="proof"&&fcoseLabelDimensions.checked,packComponents:false});
+const layoutOptions=(name,animate)=>name==="cose"?forceLayoutOptions(animate):name==="fcose"?fcoseLayoutOptions(animate):{name,animate,padding:40};
+const updateLayoutControls=()=>{
+  forceControls.hidden=layoutSelect.value!=="cose";
+  fcoseControls.hidden=layoutSelect.value!=="fcose";
+  const labelsAvailable=fcoseQuality.value==="proof";
+  fcoseLabelDimensions.disabled=!labelsAvailable;
+  if(!labelsAvailable) fcoseLabelDimensions.checked=false;
+};
+updateLayoutControls();
 const byId=Object.fromEntries(DATA.nodes.map(node=>[node.id,node]));
 const outgoing={}, incoming={};
 DATA.nodes.forEach(node=>{outgoing[node.id]=[];incoming[node.id]=[];});
@@ -410,14 +458,22 @@ const cy=cytoscape({
     {selector:".dim",style:{"opacity":.12}},
     {selector:".hl",style:{"border-width":4,"border-color":"#ffffff"}}
   ],
-  layout:{name:DATA.initialLayout,animate:false,nodeRepulsion:9000,idealEdgeLength:90,padding:40}
+  layout:layoutOptions(DATA.initialLayout,false)
 });
 
 search.addEventListener("input",applyFilter);
 typeSelect.addEventListener("change",applyFilter);
 layoutSelect.addEventListener("change",event=>{
-  cy.layout({name:event.target.value,animate:true,padding:40,nodeRepulsion:9000,idealEdgeLength:90}).run();
+  updateLayoutControls();
+  cy.layout(layoutOptions(event.target.value,true)).run();
 });
+[forceRepulsion,forceEdgeLength,forcePadding].forEach(input=>input.addEventListener("change",()=>{
+  if(layoutSelect.value==="cose") cy.layout(forceLayoutOptions(true)).run();
+}));
+[fcoseQuality,fcoseSeparation,fcoseRepulsion,fcoseEdgeLength,fcoseGravity,fcosePadding,fcoseLabelDimensions].forEach(input=>input.addEventListener("change",()=>{
+  updateLayoutControls();
+  if(layoutSelect.value==="fcose") cy.layout(fcoseLayoutOptions(true)).run();
+}));
 
 function escapeHtml(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");}
 function escapeAttr(value){return escapeHtml(value);}

@@ -19,7 +19,7 @@ Optional flags:
 - `-o`, `--out`: output HTML path. Defaults to `<bundle>/viz.html`.
 - `-t`, `--title`: graph title shown in the header.
 - `-l`, `--link`: optional source URL shown in the header.
-- `--layout`: initial layout. One of `force`, `radial`, or `grid`.
+- `--layout`: initial layout. One of `force`, `fcose`, `radial`, or `grid`.
 - `--max-body`: maximum body characters stored per concept in the output.
 
 The script is OS-agnostic and directory-agnostic. It fails fast if the global
@@ -35,3 +35,9 @@ Interpret the result:
   install is required.
 - Concept nodes are colored by `type` and linked by markdown cross-links.
 - Clicking a concept opens its details, outgoing links, and backlinks.
+- When the page's **force** layout is selected, controls appear for node
+  repulsion, ideal edge length, and padding. Changing a value re-runs the
+  force layout.
+- **force (fCoSE)** is available as a second force-directed layout. Its
+  settings include quality, separation, repulsion, edge length, gravity, and
+  padding. Label dimensions can be included when using `proof` quality.
